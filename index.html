@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Culture Bridge Globe</title>
+  <link rel="stylesheet" href="./main.min.css">
+  <style>
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #f4f5f1; }
+    #globe-container { width: 100%; height: 100%; aspect-ratio: auto; }
+  </style>
+</head>
+<body>
+  <div id="globe-container" aria-label="Interactive Culture Bridge globe"></div>
+  <script src="./main.min.js"></script>
+  <script>
+    new BrandGlobe({
+      container: '#globe-container',
+      padding: 18,
+      overflow: 80,
+      scale: 0.82,
+      colors: {
+        globe: '#004972',
+        accent: '#828282',
+        stroke: '#c9c9c9',
+        atmosphere: '#1d6791',
+        arcStart: '#ffaa3c',
+        arcEnd: '#ffaa3c',
+        hubPoint: '#ffffff',
+        hubRing: '#ffffff'
+      },
+      globe: { opacity: 1, shininess: 14 },
+      atmosphere: { enabled: true, altitude: 0.22 },
+      rotation: { enabled: true, speed: 0 },
+      interaction: { enabled: true },
+      initialView: { lat: 18, lng: 18, altitude: 1.7 },
+      polygons: {
+        enabled: true,
+        style: 'filled',
+        altitude: 0.008,
+        capOpacity: 0.88,
+        wireframe: { enabled: false, color: '#ffffff', opacity: 0 }
+      },
+      arcs: { enabled: false },
+      points: { enabled: false },
+      rings: { enabled: false },
+      hubs: [],
+      connections: []
+    });
+  </script>
+</body>
+</html>
