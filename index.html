@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="./main.min.css">
   <style>
     @font-face { font-family: Geist; src: url("./Geist-Variable.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
-    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #f4f5f1; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #faf8f3; }
     #globe-frame { position:fixed; inset:0; }
     #globe-container { width:100%; height:100%; }
     .controls { max-height: calc(100vh - 40px); overflow-y: auto; box-sizing: border-box; position: fixed; z-index: 5; top: 20px; left: 20px; padding: 16px; width: 190px; border: 1px solid #d8e1de; border-radius: 16px; background: rgba(255,255,255,.94); box-shadow: 0 8px 30px #12352c16; font: 14px Geist,system-ui,sans-serif; color: #29453f; }
@@ -54,7 +54,8 @@
     .person-button small { display:block; margin-top:3px; color:#71867e; font-weight:400; }
     @media(max-width:850px){ #browse { top:auto; left:12px; right:12px; bottom:12px; width:auto; max-height:40vh; } .browse-inner { padding:16px; } }
     @media(max-width:600px){ .controls:not(.profile){top:12px;left:12px;width:150px;padding:12px} }
-      #browse, .controls:not(.profile) { display: none; }
+      .country-label { color: #17324d; background: rgba(250,248,243,.96); border: 1px solid #c79a3b; border-radius: 5px; padding: 3px 7px; font: 650 12px/1.2 Geist,system-ui,sans-serif; letter-spacing: .015em; white-space: nowrap; pointer-events: none; box-shadow: 0 2px 6px #17324d30; opacity: 0; }
+    #browse, .controls:not(.profile) { display: none; }
   </style>
 </head>
 <body>
@@ -81,13 +82,24 @@
 </aside>
 <script src="./main.min.js"></script><script>
 const globe = new BrandGlobe({
-    container: '#globe-container', padding: 18, overflow: 80, scale: 0.9,
+    container: '#globe-container', padding: 0, overflow: 0, scale: 1,
     colors: { globe:'#004972', accent:'#828282', stroke:'#c9c9c9', atmosphere:'#1d6791', arcStart:'#ffaa3c', arcEnd:'#ffaa3c', hubPoint:'#ffffff', hubRing:'#ffffff' },
-    globe:{opacity:1,shininess:14}, atmosphere:{enabled:true,altitude:0.22}, rotation:{enabled:true,speed:0}, interaction:{enabled:true}, initialView:{lat:18,lng:18,altitude:1.7},
+    globe:{opacity:1,shininess:14}, atmosphere:{enabled:false,altitude:0}, rotation:{enabled:true,speed:0}, interaction:{enabled:true}, initialView:{lat:18,lng:18,altitude:1.7},
     polygons:{enabled:true,style:'filled',altitude:0.008,capOpacity:0.88,wireframe:{enabled:false,color:'#ffffff',opacity:0}},
     arcs:{enabled:true,strokeWidth:0.55,dashLength:1,dashGap:0,animateTime:0,altitudeAutoScale:0.45}, points:{enabled:false,radius:0.55,altitude:0.01}, rings:{enabled:false,maxRadius:3,propagationSpeed:1.6,repeatPeriod:1800},
     hubs:[{name:'London',lat:51.5074,lng:-0.1278},{name:'New York',lat:40.7128,lng:-74.006},{name:'San Francisco',lat:37.7749,lng:-122.419},{name:'Tokyo',lat:35.6762,lng:139.6503},{name:'Dubai',lat:25.276,lng:55.2962},{name:'Sydney',lat:-33.8688,lng:151.2093},{name:'Sao Paulo',lat:-23.5505,lng:-46.6333}], connections:[]
 });
+
+// Fit the sphere to the shorter side of the iframe, including on mobile.
+globe._effectiveAltitude = function () {
+  const width = Math.max(1, globe.container.clientWidth);
+  const height = Math.max(1, globe.container.clientHeight);
+  const halfFov = globe.globe.camera().fov * Math.PI / 360;
+  const angle = Math.atan(Math.tan(halfFov) * Math.min(1, width / height) * 0.98);
+  return 1 / Math.sin(angle) - 1;
+};
+globe._resizeHandler();
+new ResizeObserver(() => globe._resizeHandler()).observe(globe.container);
 
 // Paint the country shapes and their borders onto a local globe texture.
 // Duplicating wrapped rings handles countries that cross the date line.
@@ -119,17 +131,6 @@ const labels = countries.map(feature => {
   }
   return best && { ...best, name: feature.properties.name };
 }).filter(label => label && label.area > 8);
-const waterLabels = [
-  {name:'Pacific Ocean',lat:0,lng:-155}, {name:'Pacific Ocean',lat:0,lng:155},
-  {name:'Atlantic Ocean',lat:0,lng:-30}, {name:'Indian Ocean',lat:-22,lng:78},
-  {name:'Arctic Ocean',lat:76,lng:0}, {name:'Southern Ocean',lat:-58,lng:0},
-  {name:'Caribbean Sea',lat:15,lng:-75}, {name:'Gulf of Mexico',lat:24,lng:-90},
-  {name:'Mediterranean Sea',lat:35,lng:18}, {name:'North Sea',lat:56,lng:3},
-  {name:'Baltic Sea',lat:58,lng:20}, {name:'Red Sea',lat:20,lng:38},
-  {name:'Arabian Sea',lat:15,lng:64}, {name:'Bay of Bengal',lat:15,lng:88},
-  {name:'South China Sea',lat:12,lng:115}, {name:'Sea of Japan',lat:40,lng:135},
-  {name:'Coral Sea',lat:-18,lng:150}, {name:'Tasman Sea',lat:-40,lng:160}
-];
 const mockProfiles = [
   {name:'Vancouver',lat:49.2827,lng:-123.1207,country:['ca','Canada']},
   {name:'Mexico City',lat:19.4326,lng:-99.1332,country:['mx','Mexico']},
@@ -272,7 +273,7 @@ function positionProfile() {
   profile.style.top = `${Math.max(8, Math.min(top, innerHeight - profile.offsetHeight - 8))}px`;
 }
 
-globe.globe.htmlElementsData([...labels.filter(label => label.area > 100), ...waterLabels.map(label => ({...label, water:true})), ...avatarMarkers])
+globe.globe.htmlElementsData([...labels.filter(label => label.area > 100), ...avatarMarkers])
   .htmlLat('lat')
   .htmlLng('lng')
   .htmlAltitude(0.012)
@@ -318,25 +319,38 @@ globe.globe.htmlElementsData([...labels.filter(label => label.area > 100), ...wa
     element.textContent = label.name;
     element.dataset.lat = label.lat;
     element.dataset.lng = label.lng;
-    element.className = label.water ? 'water-label' : 'country-label';
-    element.style.cssText = label.water ? 'color:#c5e1ea;font:500 9px/1.1 Geist,system-ui,sans-serif;font-style:italic;white-space:nowrap;letter-spacing:.02em;pointer-events:none;text-shadow:0 1px 2px rgba(0,35,50,.8);opacity:0;transition:opacity 150ms' : 'color:var(--label-color,#ffffff);font:var(--label-weight,500) var(--label-size,10px)/1.1 Geist,system-ui,sans-serif;white-space:nowrap;letter-spacing:.01em;pointer-events:none;text-shadow:0 1px 1px rgba(20,38,42,.35);opacity:0;transition:opacity 150ms';
+    element.className = 'country-label';
+    element.dataset.area = label.area;
     return element;
   });
 function updateLabelVisibility() {
   const view = globe.globe.pointOfView();
   const radians = Math.PI / 180;
-  document.querySelectorAll('.country-label, .water-label, .globe-avatar').forEach(element => {
+  const facing = element => {
     const lat = Number(element.dataset.lat) * radians;
     const centerLat = view.lat * radians;
-    const longitudeDifference = (Number(element.dataset.lng) - view.lng) * radians;
-    const facing = Math.sin(lat) * Math.sin(centerLat) + Math.cos(lat) * Math.cos(centerLat) * Math.cos(longitudeDifference);
-    const visible = facing > (element.classList.contains('globe-avatar') ? 0.5 : 0.65);
+    const delta = (Number(element.dataset.lng) - view.lng) * radians;
+    return Math.sin(lat) * Math.sin(centerLat) + Math.cos(lat) * Math.cos(centerLat) * Math.cos(delta);
+  };
+  const occupied = [];
+  document.querySelectorAll('.globe-avatar').forEach(element => {
+    const rect = element.getBoundingClientRect();
+    const visible = facing(element) > 0.5 && rect.left >= 0 && rect.right <= innerWidth && rect.top >= 0 && rect.bottom <= innerHeight;
     element.style.opacity = visible ? '1' : '0';
-    if (element.classList.contains('globe-avatar')) {
-      element.style.pointerEvents = visible ? 'auto' : 'none';
-      element.tabIndex = visible ? 0 : -1;
-    }
+    element.style.pointerEvents = visible ? 'auto' : 'none';
+    element.tabIndex = visible ? 0 : -1;
+    if (visible) occupied.push(element.getBoundingClientRect());
   });
+  // Prioritize larger countries and leave space around avatars and other labels.
+  const countryLabels = [...document.querySelectorAll('.country-label')]
+    .sort((a, b) => Number(b.dataset.area) - Number(a.dataset.area));
+  for (const element of countryLabels) {
+    const rect = element.getBoundingClientRect();
+    const overlaps = occupied.some(other => rect.left < other.right + 5 && rect.right > other.left - 5 && rect.top < other.bottom + 5 && rect.bottom > other.top - 5);
+    const visible = facing(element) > 0.65 && !overlaps && rect.left >= 2 && rect.right <= innerWidth - 2 && rect.top >= 2 && rect.bottom <= innerHeight - 2;
+    element.style.opacity = visible ? '1' : '0';
+    if (visible) occupied.push(rect);
+  }
   positionProfile();
 }
 globe.globe.controls().addEventListener('change', updateLabelVisibility);
@@ -466,22 +480,9 @@ document.getElementById('reset').addEventListener('click', () => {
   applyColors();
   saveSettings().catch(() => {});
 });
-applySavedSettings({"ocean": "#004972", "land": "#f2dfca", "borders": "#004972", "atmosphere": "#1d6791", "background": "#f4f5f1", "label-color": "#ffffff", "thickness": 1, "labelSize": 10, "labelWeight": 400});
+applySavedSettings({"ocean": "#004972", "land": "#f2dfca", "borders": "#004972", "atmosphere": "#1d6791", "background": "#faf8f3", "label-color": "#ffffff", "thickness": 1, "labelSize": 10, "labelWeight": 400});
 applyColors();
 
-// The local development server exposes a version; a change reloads this page.
-if (['localhost', '127.0.0.1'].includes(location.hostname)) {
-  let version;
-  setInterval(async () => {
-    try {
-      const response = await fetch('/__version', { cache: 'no-store' });
-      if (!response.ok) return;
-      const current = await response.text();
-      if (version !== undefined && current !== version) location.reload();
-      version = current;
-    } catch (_) { /* Retry when the development server is available. */ }
-  }, 1000);
-}
 </script></body></html>
 
 
