@@ -1,0 +1,189 @@
+[
+  {
+    "country": "Algeria",
+    "lat": 28,
+    "lng": 2,
+    "avatar": "nairobi",
+    "videos": [
+      "1bMtEn0BIIBYM3Rx_AUFrXaUt3FOiaBQz"
+    ]
+  },
+  {
+    "country": "Nigeria",
+    "lat": 9,
+    "lng": 8,
+    "avatar": "lagos",
+    "videos": [
+      "1RZdp4KMwNXadeUwGBQS-4vuNLsse0reQ"
+    ]
+  },
+  {
+    "country": "China",
+    "lat": 35,
+    "lng": 104,
+    "avatar": "singapore",
+    "videos": [
+      "1RafP-eEibNLRdozRJYyHduw2RRTRMkmi"
+    ]
+  },
+  {
+    "country": "Indonesia",
+    "lat": -2,
+    "lng": 118,
+    "avatar": "mumbai",
+    "videos": [
+      "1AJu5CxmPS6ARqkSH6KrJ71NvFgrAa36D"
+    ]
+  },
+  {
+    "country": "Japan",
+    "lat": 36,
+    "lng": 138,
+    "avatar": "tokyo",
+    "videos": [
+      "1_PKQZoamLjPvCJg65De9uxERLWMSLx_R",
+      "1xBEFKkB1MbvNVqF1gIyAUZ-_wP_bAMrg"
+    ]
+  },
+  {
+    "country": "North Korea",
+    "lat": 40.3,
+    "lng": 127,
+    "avatar": "seoul",
+    "videos": [
+      "1qsbPawcizNur-fkTr37v7K9rRY5yo4ln"
+    ]
+  },
+  {
+    "country": "Philippines",
+    "lat": 12,
+    "lng": 123,
+    "avatar": "singapore",
+    "videos": [
+      "1cOMVIUX4V_TfaneLTkDW0HVNCMT5GjCm"
+    ]
+  },
+  {
+    "country": "Singapore",
+    "lat": 1.35,
+    "lng": 103.8,
+    "avatar": "singapore",
+    "videos": [
+      "1gpGgK-JoNeAgolS1kQpVbsA-iRdPXBr5"
+    ]
+  },
+  {
+    "country": "South Korea",
+    "lat": 36,
+    "lng": 128,
+    "avatar": "seoul",
+    "videos": [
+      "15BoO_aNgM9atIqCwrXWPRbXcWo3BQ4Lj"
+    ]
+  },
+  {
+    "country": "Thailand",
+    "lat": 15,
+    "lng": 101,
+    "avatar": "tokyo",
+    "videos": [
+      "1AS9y4hItQMGt1JhNX5DSbGzQeKWV383Z"
+    ]
+  },
+  {
+    "country": "Australia",
+    "lat": -25,
+    "lng": 134,
+    "avatar": "sydney",
+    "videos": [
+      "18usg7Ir9FO24HOlqAnaS2rbwXMqSXIKt",
+      "1C2UHP-k-o3UJCddQYsdPkdTTyNcJ2qNS",
+      "1bYH2Occ7yQku6A3SETYStXpwQ9lwCO8O"
+    ]
+  },
+  {
+    "country": "Denmark",
+    "lat": 56,
+    "lng": 10,
+    "avatar": "dublin",
+    "videos": [
+      "16KigYILr3TmqgNGfbWqh2fPxFsVY6foZ"
+    ]
+  },
+  {
+    "country": "United Kingdom",
+    "lat": 54,
+    "lng": -2,
+    "avatar": "london",
+    "videos": [
+      "1hHntPRBtc4pNcSIfB0Hs6Y9GgbGKPtPN",
+      "1iivWgLNRU9PZakQUPhj3J2YGxAsUQsZJ"
+    ]
+  },
+  {
+    "country": "Germany",
+    "lat": 51,
+    "lng": 10,
+    "avatar": "berlin",
+    "videos": [
+      "1xkODQN2Agbze5aFjj6mVGyAHe-HAkIeu",
+      "1BFOm9-dOD71ArjICzorMGT1ARJosQccG",
+      "1XJo-kkduIL0UlZZ81A6Jn-4U1CXGnJeB"
+    ]
+  },
+  {
+    "country": "Poland",
+    "lat": 52,
+    "lng": 19,
+    "avatar": "paris",
+    "videos": [
+      "1vgpSj78PhaTwHTlAVPxd1RMTEbm3rABX"
+    ]
+  },
+  {
+    "country": "Russia",
+    "lat": 60,
+    "lng": 45,
+    "avatar": "berlin",
+    "videos": [
+      "19qKvZ2lVAgxHc9nQ1Tw_i0pTBzu0scJn"
+    ]
+  },
+  {
+    "country": "Serbia",
+    "lat": 44,
+    "lng": 21,
+    "avatar": "paris",
+    "videos": [
+      "1Yec13wcomkQfkMbLeBB37VIZAyfjAtkA"
+    ]
+  },
+  {
+    "country": "Sweden",
+    "lat": 62,
+    "lng": 15,
+    "avatar": "dublin",
+    "videos": [
+      "1gESbiCPQjBkJ90G706fue0_sycgciyoD"
+    ]
+  },
+  {
+    "country": "Netherlands",
+    "lat": 52.2,
+    "lng": 5.3,
+    "avatar": "london",
+    "videos": [
+      "1L8iqIZvPAHBLCF_RpPrUx2qyhukk8VPj"
+    ]
+  },
+  {
+    "country": "Mexico",
+    "lat": 23,
+    "lng": -102,
+    "avatar": "mexico-city",
+    "videos": [
+      "11olqdShaGg1HBRvjgrL7vSbN3Ez-2xcV",
+      "1gNNfdwsPvJNaprxgS0-yS-3nAkQIHjDB"
+    ]
+  }
+]

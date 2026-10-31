@@ -1,21 +1,14 @@
 # Culture Bridge globe
 
-Interactive globe for the Learning Bridges WordPress hero. Country labels use navy text with a subtle light outline and overlap avoidance. Avatars open profile cards. The sphere fits the shorter side of the embed and has no atmosphere glow.
+The globe displays anonymous country markers for videos listed in `videos.json`. Each entry has a country name, approximate country coordinates, an illustrated avatar file, and an array of Google Drive file IDs. Multiple IDs appear as selectable videos. Drive files must remain viewable by the public for the embedded player to work.
 
 ## Run locally on Windows
-
-Open PowerShell and run:
 
 ```powershell
 cd C:\Users\email\OneDrive\Documents\learningbridge\culturebridge-pages
 python -m http.server 8000 --bind 127.0.0.1
 ```
 
-Open http://127.0.0.1:8000/ in your browser. Press Ctrl+C in PowerShell to stop the server. Refresh the browser after editing index.html.
+Open http://127.0.0.1:8000/ and press Ctrl+C in the terminal to stop. Refresh after changes.
 
-## Publish
-
-Commit and push changes to main. GitHub Pages publishes from the repository root:
-https://justinhyu6.github.io/culturebridge/
-
-The WordPress iframe automatically loads the published version. Its dimensions come from the WordPress hero CSS; the globe fills its shorter side while keeping the whole sphere visible.
+Commit and push changes to `main` to publish through GitHub Pages at https://justinhyu6.github.io/culturebridge/.
