@@ -1,6 +1,6 @@
 # Culture Bridge globe
 
-Interactive globe for the Learning Bridges WordPress hero. Country labels use the site navy, cream, and gold palette, with overlap avoidance. Avatars open profile cards. The sphere fits the shorter side of the embed and has no atmosphere glow.
+Interactive globe for the Learning Bridges WordPress hero. Country labels use navy text with a subtle light outline and overlap avoidance. Avatars open profile cards. The sphere fits the shorter side of the embed and has no atmosphere glow.
 
 ## Run locally on Windows
 
