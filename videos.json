@@ -8,7 +8,8 @@
       {
         "id": "1bMtEn0BIIBYM3Rx_AUFrXaUt3FOiaBQz",
         "width": 540,
-        "height": 960
+        "height": 960,
+        "avatar": "toronto"
       }
     ]
   },
@@ -21,7 +22,8 @@
       {
         "id": "1RZdp4KMwNXadeUwGBQS-4vuNLsse0reQ",
         "width": 960,
-        "height": 540
+        "height": 540,
+        "avatar": "sydney"
       }
     ]
   },
@@ -34,7 +36,8 @@
       {
         "id": "1RafP-eEibNLRdozRJYyHduw2RRTRMkmi",
         "width": 967,
-        "height": 544
+        "height": 544,
+        "avatar": "toronto"
       }
     ]
   },
@@ -47,7 +50,8 @@
       {
         "id": "1AJu5CxmPS6ARqkSH6KrJ71NvFgrAa36D",
         "width": 544,
-        "height": 960
+        "height": 960,
+        "avatar": "berlin"
       }
     ]
   },
@@ -60,12 +64,14 @@
       {
         "id": "1_PKQZoamLjPvCJg65De9uxERLWMSLx_R",
         "width": 568,
-        "height": 320
+        "height": 320,
+        "avatar": "dublin"
       },
       {
         "id": "1xBEFKkB1MbvNVqF1gIyAUZ-_wP_bAMrg",
         "width": 544,
-        "height": 960
+        "height": 960,
+        "avatar": "toronto"
       }
     ]
   },
@@ -78,7 +84,8 @@
       {
         "id": "1qsbPawcizNur-fkTr37v7K9rRY5yo4ln",
         "width": 544,
-        "height": 960
+        "height": 960,
+        "avatar": "singapore"
       }
     ]
   },
@@ -91,7 +98,8 @@
       {
         "id": "1cOMVIUX4V_TfaneLTkDW0HVNCMT5GjCm",
         "width": 576,
-        "height": 1024
+        "height": 1024,
+        "avatar": "mexico-city"
       }
     ]
   },
@@ -104,7 +112,8 @@
       {
         "id": "1gpGgK-JoNeAgolS1kQpVbsA-iRdPXBr5",
         "width": 1280,
-        "height": 720
+        "height": 720,
+        "avatar": "singapore"
       }
     ]
   },
@@ -117,7 +126,8 @@
       {
         "id": "15BoO_aNgM9atIqCwrXWPRbXcWo3BQ4Lj",
         "width": 720,
-        "height": 1280
+        "height": 1280,
+        "avatar": "new-york"
       }
     ]
   },
@@ -130,7 +140,8 @@
       {
         "id": "1AS9y4hItQMGt1JhNX5DSbGzQeKWV383Z",
         "width": 720,
-        "height": 1280
+        "height": 1280,
+        "avatar": "toronto"
       }
     ]
   },
@@ -143,17 +154,20 @@
       {
         "id": "18usg7Ir9FO24HOlqAnaS2rbwXMqSXIKt",
         "width": 1280,
-        "height": 720
+        "height": 720,
+        "avatar": "paris"
       },
       {
         "id": "1C2UHP-k-o3UJCddQYsdPkdTTyNcJ2qNS",
         "width": 960,
-        "height": 544
+        "height": 544,
+        "avatar": "toronto"
       },
       {
         "id": "1bYH2Occ7yQku6A3SETYStXpwQ9lwCO8O",
         "width": 960,
-        "height": 544
+        "height": 544,
+        "avatar": "singapore"
       }
     ]
   },
@@ -166,7 +180,8 @@
       {
         "id": "16KigYILr3TmqgNGfbWqh2fPxFsVY6foZ",
         "width": 576,
-        "height": 1024
+        "height": 1024,
+        "avatar": "tokyo"
       }
     ]
   },
@@ -179,12 +194,14 @@
       {
         "id": "1hHntPRBtc4pNcSIfB0Hs6Y9GgbGKPtPN",
         "width": 544,
-        "height": 960
+        "height": 960,
+        "avatar": "mexico-city"
       },
       {
         "id": "1iivWgLNRU9PZakQUPhj3J2YGxAsUQsZJ",
         "width": 576,
-        "height": 1024
+        "height": 1024,
+        "avatar": "paris"
       }
     ]
   },
@@ -197,17 +214,20 @@
       {
         "id": "1xkODQN2Agbze5aFjj6mVGyAHe-HAkIeu",
         "width": 568,
-        "height": 320
+        "height": 320,
+        "avatar": "london"
       },
       {
         "id": "1BFOm9-dOD71ArjICzorMGT1ARJosQccG",
         "width": 568,
-        "height": 320
+        "height": 320,
+        "avatar": "sydney"
       },
       {
         "id": "1XJo-kkduIL0UlZZ81A6Jn-4U1CXGnJeB",
         "width": 544,
-        "height": 960
+        "height": 960,
+        "avatar": "dublin"
       }
     ]
   },
@@ -220,7 +240,8 @@
       {
         "id": "1vgpSj78PhaTwHTlAVPxd1RMTEbm3rABX",
         "width": 544,
-        "height": 960
+        "height": 960,
+        "avatar": "paris"
       }
     ]
   },
@@ -233,7 +254,8 @@
       {
         "id": "19qKvZ2lVAgxHc9nQ1Tw_i0pTBzu0scJn",
         "width": 1280,
-        "height": 720
+        "height": 720,
+        "avatar": "toronto"
       }
     ]
   },
@@ -246,7 +268,8 @@
       {
         "id": "1Yec13wcomkQfkMbLeBB37VIZAyfjAtkA",
         "width": 478,
-        "height": 850
+        "height": 850,
+        "avatar": "mexico-city"
       }
     ]
   },
@@ -259,7 +282,8 @@
       {
         "id": "1gESbiCPQjBkJ90G706fue0_sycgciyoD",
         "width": 1280,
-        "height": 720
+        "height": 720,
+        "avatar": "vancouver"
       }
     ]
   },
@@ -272,7 +296,8 @@
       {
         "id": "1L8iqIZvPAHBLCF_RpPrUx2qyhukk8VPj",
         "width": 544,
-        "height": 960
+        "height": 960,
+        "avatar": "san-francisco"
       }
     ]
   },
@@ -285,12 +310,14 @@
       {
         "id": "11olqdShaGg1HBRvjgrL7vSbN3Ez-2xcV",
         "width": 544,
-        "height": 960
+        "height": 960,
+        "avatar": "dubai"
       },
       {
         "id": "1gNNfdwsPvJNaprxgS0-yS-3nAkQIHjDB",
         "width": 1080,
-        "height": 1920
+        "height": 1920,
+        "avatar": "mumbai"
       }
     ]
   }

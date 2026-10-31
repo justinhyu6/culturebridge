@@ -9,7 +9,7 @@
     @font-face { font-family: Geist; src: url('./Geist-Variable.woff2') format('woff2'); font-weight:100 900; font-display:swap; }
     * { box-sizing:border-box; }
     html,body { width:100%; height:100%; margin:0; overflow:hidden; background:#faf8f3; color:#17324d; font-family:Geist,system-ui,sans-serif; }
-    #globe-container { width:100%; height:100%; }
+    #globe-container { width:100%; height:100%; position:relative; z-index:0; isolation:isolate; }
     .country-marker { display:flex; flex-direction:column; align-items:center; border:0; padding:0; background:none; cursor:pointer; color:#17324d; font:650 11px/1.15 Geist,system-ui,sans-serif; white-space:nowrap; text-shadow:-1px -1px 2px #faf8f3,1px -1px 2px #faf8f3,-1px 1px 2px #faf8f3,1px 1px 2px #faf8f3; opacity:0; }
     .country-marker img { width:38px; height:38px; border:2px solid white; border-radius:50%; background:#e8d5b7; box-shadow:0 2px 6px #0005; transition:transform 160ms ease; }
     .country-marker:hover img,.country-marker:focus-visible img { transform:translateY(-2px) scale(1.08); }
@@ -26,8 +26,10 @@
     .profile-header button { font-size:20px; line-height:1; }
     #video-choices { display:flex; flex-wrap:wrap; gap:5px; margin:8px 0; }
     #video-choices:empty { display:none; }
-    .video-choice { font-size:12px; }
-    .video-choice[aria-pressed=true] { color:white; background:#17324d; }
+    .video-choice { padding:2px; line-height:0; background:transparent; border:2px solid transparent; border-radius:50%; }
+    .video-choice img { width:32px; height:32px; border-radius:50%; background:#e8d5b7; }
+    .video-choice[aria-pressed=true] { border-color:#286b8f; }
+    .video-choice:focus-visible { outline:2px solid #286b8f; outline-offset:2px; }
     #player-frame { position:relative; width:100%; aspect-ratio:var(--video-ratio, 16/9); margin-inline:auto; overflow:hidden; border-radius:8px; background:#17324d; }
     #player { position:absolute; left:0; top:0; border:0; transform-origin:top left; background:#17324d; }
     #country-picker { position:fixed; z-index:10; left:8px; bottom:8px; width:auto; max-width:145px; border:1px solid #cbd6d0; border-radius:7px; background:#faf8f3ee; color:#17324d; padding:5px; font:600 11px Geist,system-ui,sans-serif; }
@@ -130,23 +132,25 @@
     player.title=entry.country+' video '+(index+1);
     choices.querySelectorAll('button').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));
   }
-  function showCountry(entry,fly=false) {
+  function showCountry(entry,fly=false,index=0) {
     restoreMarker();
     currentCountry=entry; document.getElementById('profile-title').textContent=entry.country;
-    document.getElementById('profile-avatar').src='./avatars/'+entry.avatar+'.svg';
+    document.getElementById('profile-avatar').src='./avatars/'+entry.videos[index].avatar+'.svg';
     document.getElementById('profile-flag').src='./flags/'+flagCodes[entry.country]+'.svg';
-    currentMarker=[...document.querySelectorAll('.country-marker')].find(marker=>marker.dataset.country===entry.country) || null;
+    currentMarker=[...document.querySelectorAll('.country-marker')].find(marker=>marker.dataset.country===entry.country && Number(marker.dataset.videoIndex)===index) || null;
     if(currentMarker) {
       const image=currentMarker.querySelector('img');
       image.style.transform=getComputedStyle(image).transform;
       image.style.visibility='hidden';
     }
     choices.replaceChildren();
-    if(entry.videos.length>1) entry.videos.forEach((id,i)=>{
+    if(entry.videos.length>1) entry.videos.forEach((video,i)=>{
       const button=document.createElement('button'); button.className='video-choice'; button.type='button';
-      button.textContent='Video '+(i+1); button.addEventListener('click',()=>selectVideo(entry,i)); choices.append(button);
+      button.setAttribute('aria-label',entry.country+' story '+(i+1)+' of '+entry.videos.length);
+      const image=document.createElement('img'); image.src='./avatars/'+video.avatar+'.svg'; image.alt='';
+      button.append(image); button.addEventListener('click',()=>showCountry(entry,false,i)); choices.append(button);
     });
-    selectVideo(entry,0); profile.hidden=false; picker.value=entry.country; positionProfile();
+    selectVideo(entry,index); profile.hidden=false; picker.value=entry.country; positionProfile();
     if(fly) globe.globe.pointOfView({lat:entry.lat,lng:entry.lng,altitude:globe._effectiveAltitude()},700);
   }
   document.getElementById('close-profile').addEventListener('click',()=>{ profile.hidden=true; player.removeAttribute('src'); picker.value=''; currentCountry=null; currentVideo=null; restoreMarker(); });
@@ -165,12 +169,14 @@
     entries.sort((a,b)=>a.country.localeCompare(b.country));
     for(const entry of entries) { const option=document.createElement('option'); option.value=entry.country; option.textContent=entry.country; picker.append(option); }
     picker.addEventListener('change',()=>{ const entry=entries.find(item=>item.country===picker.value); if(entry)showCountry(entry,true); });
-    globe.globe.htmlElementsData(entries).htmlLat('lat').htmlLng('lng').htmlAltitude(0.012).htmlElement(entry=>{
+    const markers=entries.flatMap(entry=>entry.videos.map((video,index)=>({...entry, videoIndex:index})));
+    globe.globe.htmlElementsData(markers).htmlLat('lat').htmlLng('lng').htmlAltitude(0.012).htmlElement(entry=>{
       const marker=document.createElement('button'); marker.type='button'; marker.className='country-marker';
-      marker.dataset.lat=entry.lat; marker.dataset.lng=entry.lng; marker.dataset.country=entry.country; marker.setAttribute('aria-label',entry.country+': '+entry.videos.length+' '+(entry.videos.length===1?'video':'videos'));
-      const avatar=document.createElement('img'); avatar.src='./avatars/'+entry.avatar+'.svg'; avatar.alt='';
-      const label=document.createElement('span'); label.textContent=entry.country; marker.append(avatar,label);
-      marker.addEventListener('click',event=>{event.stopPropagation();showCountry(entry);}); return marker;
+      marker.dataset.lat=entry.lat; marker.dataset.lng=entry.lng; marker.dataset.country=entry.country; marker.dataset.videoIndex=entry.videoIndex; marker.setAttribute('aria-label',entry.country+(entry.videos.length>1?' story '+(entry.videoIndex+1)+' of '+entry.videos.length:' story'));
+      if(entry.videos.length>1) marker.style.translate=((entry.videoIndex-(entry.videos.length-1)/2)*42)+'px 0';
+      const avatar=document.createElement('img'); avatar.src='./avatars/'+entry.videos[entry.videoIndex].avatar+'.svg'; avatar.alt='';
+      const label=document.createElement('span'); label.textContent=entry.videoIndex===Math.floor((entry.videos.length-1)/2)?entry.country:'\u00a0'; marker.append(avatar,label);
+      marker.addEventListener('click',event=>{event.stopPropagation();showCountry(entry,false,entry.videoIndex);}); return marker;
     });
     globe.globe.controls().addEventListener('change',updateVisibility); setInterval(updateVisibility,200); updateVisibility();
   }).catch(error=>{const status=document.getElementById('status');status.hidden=false;status.textContent='The video list could not be loaded.';console.error(error);});

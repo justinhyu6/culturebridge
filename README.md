@@ -1,6 +1,6 @@
 # Culture Bridge globe
 
-The globe displays anonymous country markers for videos listed in `videos.json`. Each entry has a country name, approximate country coordinates, an illustrated avatar file, and an array of Google Drive file IDs with each video’s width and height. Multiple IDs appear as selectable videos. Drive files must remain viewable by the public for the embedded player to work.
+The globe displays anonymous country markers for videos listed in `videos.json`. Each entry has a country name, approximate country coordinates, and an array of videos, each with its Drive file ID, dimensions, and illustrated avatar file. Each video has its own globe marker. Drive files must remain viewable by the public for the embedded player to work.
 
 ## Run locally on Windows
 
