@@ -5,7 +5,11 @@
     "lng": 2,
     "avatar": "nairobi",
     "videos": [
-      "1bMtEn0BIIBYM3Rx_AUFrXaUt3FOiaBQz"
+      {
+        "id": "1bMtEn0BIIBYM3Rx_AUFrXaUt3FOiaBQz",
+        "width": 540,
+        "height": 960
+      }
     ]
   },
   {
@@ -14,7 +18,11 @@
     "lng": 8,
     "avatar": "lagos",
     "videos": [
-      "1RZdp4KMwNXadeUwGBQS-4vuNLsse0reQ"
+      {
+        "id": "1RZdp4KMwNXadeUwGBQS-4vuNLsse0reQ",
+        "width": 960,
+        "height": 540
+      }
     ]
   },
   {
@@ -23,7 +31,11 @@
     "lng": 104,
     "avatar": "singapore",
     "videos": [
-      "1RafP-eEibNLRdozRJYyHduw2RRTRMkmi"
+      {
+        "id": "1RafP-eEibNLRdozRJYyHduw2RRTRMkmi",
+        "width": 967,
+        "height": 544
+      }
     ]
   },
   {
@@ -32,7 +44,11 @@
     "lng": 118,
     "avatar": "mumbai",
     "videos": [
-      "1AJu5CxmPS6ARqkSH6KrJ71NvFgrAa36D"
+      {
+        "id": "1AJu5CxmPS6ARqkSH6KrJ71NvFgrAa36D",
+        "width": 544,
+        "height": 960
+      }
     ]
   },
   {
@@ -41,8 +57,16 @@
     "lng": 138,
     "avatar": "tokyo",
     "videos": [
-      "1_PKQZoamLjPvCJg65De9uxERLWMSLx_R",
-      "1xBEFKkB1MbvNVqF1gIyAUZ-_wP_bAMrg"
+      {
+        "id": "1_PKQZoamLjPvCJg65De9uxERLWMSLx_R",
+        "width": 568,
+        "height": 320
+      },
+      {
+        "id": "1xBEFKkB1MbvNVqF1gIyAUZ-_wP_bAMrg",
+        "width": 544,
+        "height": 960
+      }
     ]
   },
   {
@@ -51,7 +75,11 @@
     "lng": 127,
     "avatar": "seoul",
     "videos": [
-      "1qsbPawcizNur-fkTr37v7K9rRY5yo4ln"
+      {
+        "id": "1qsbPawcizNur-fkTr37v7K9rRY5yo4ln",
+        "width": 544,
+        "height": 960
+      }
     ]
   },
   {
@@ -60,7 +88,11 @@
     "lng": 123,
     "avatar": "singapore",
     "videos": [
-      "1cOMVIUX4V_TfaneLTkDW0HVNCMT5GjCm"
+      {
+        "id": "1cOMVIUX4V_TfaneLTkDW0HVNCMT5GjCm",
+        "width": 576,
+        "height": 1024
+      }
     ]
   },
   {
@@ -69,7 +101,11 @@
     "lng": 103.8,
     "avatar": "singapore",
     "videos": [
-      "1gpGgK-JoNeAgolS1kQpVbsA-iRdPXBr5"
+      {
+        "id": "1gpGgK-JoNeAgolS1kQpVbsA-iRdPXBr5",
+        "width": 1280,
+        "height": 720
+      }
     ]
   },
   {
@@ -78,7 +114,11 @@
     "lng": 128,
     "avatar": "seoul",
     "videos": [
-      "15BoO_aNgM9atIqCwrXWPRbXcWo3BQ4Lj"
+      {
+        "id": "15BoO_aNgM9atIqCwrXWPRbXcWo3BQ4Lj",
+        "width": 720,
+        "height": 1280
+      }
     ]
   },
   {
@@ -87,7 +127,11 @@
     "lng": 101,
     "avatar": "tokyo",
     "videos": [
-      "1AS9y4hItQMGt1JhNX5DSbGzQeKWV383Z"
+      {
+        "id": "1AS9y4hItQMGt1JhNX5DSbGzQeKWV383Z",
+        "width": 720,
+        "height": 1280
+      }
     ]
   },
   {
@@ -96,9 +140,21 @@
     "lng": 134,
     "avatar": "sydney",
     "videos": [
-      "18usg7Ir9FO24HOlqAnaS2rbwXMqSXIKt",
-      "1C2UHP-k-o3UJCddQYsdPkdTTyNcJ2qNS",
-      "1bYH2Occ7yQku6A3SETYStXpwQ9lwCO8O"
+      {
+        "id": "18usg7Ir9FO24HOlqAnaS2rbwXMqSXIKt",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "id": "1C2UHP-k-o3UJCddQYsdPkdTTyNcJ2qNS",
+        "width": 960,
+        "height": 544
+      },
+      {
+        "id": "1bYH2Occ7yQku6A3SETYStXpwQ9lwCO8O",
+        "width": 960,
+        "height": 544
+      }
     ]
   },
   {
@@ -107,7 +163,11 @@
     "lng": 10,
     "avatar": "dublin",
     "videos": [
-      "16KigYILr3TmqgNGfbWqh2fPxFsVY6foZ"
+      {
+        "id": "16KigYILr3TmqgNGfbWqh2fPxFsVY6foZ",
+        "width": 576,
+        "height": 1024
+      }
     ]
   },
   {
@@ -116,8 +176,16 @@
     "lng": -2,
     "avatar": "london",
     "videos": [
-      "1hHntPRBtc4pNcSIfB0Hs6Y9GgbGKPtPN",
-      "1iivWgLNRU9PZakQUPhj3J2YGxAsUQsZJ"
+      {
+        "id": "1hHntPRBtc4pNcSIfB0Hs6Y9GgbGKPtPN",
+        "width": 544,
+        "height": 960
+      },
+      {
+        "id": "1iivWgLNRU9PZakQUPhj3J2YGxAsUQsZJ",
+        "width": 576,
+        "height": 1024
+      }
     ]
   },
   {
@@ -126,9 +194,21 @@
     "lng": 10,
     "avatar": "berlin",
     "videos": [
-      "1xkODQN2Agbze5aFjj6mVGyAHe-HAkIeu",
-      "1BFOm9-dOD71ArjICzorMGT1ARJosQccG",
-      "1XJo-kkduIL0UlZZ81A6Jn-4U1CXGnJeB"
+      {
+        "id": "1xkODQN2Agbze5aFjj6mVGyAHe-HAkIeu",
+        "width": 568,
+        "height": 320
+      },
+      {
+        "id": "1BFOm9-dOD71ArjICzorMGT1ARJosQccG",
+        "width": 568,
+        "height": 320
+      },
+      {
+        "id": "1XJo-kkduIL0UlZZ81A6Jn-4U1CXGnJeB",
+        "width": 544,
+        "height": 960
+      }
     ]
   },
   {
@@ -137,7 +217,11 @@
     "lng": 19,
     "avatar": "paris",
     "videos": [
-      "1vgpSj78PhaTwHTlAVPxd1RMTEbm3rABX"
+      {
+        "id": "1vgpSj78PhaTwHTlAVPxd1RMTEbm3rABX",
+        "width": 544,
+        "height": 960
+      }
     ]
   },
   {
@@ -146,7 +230,11 @@
     "lng": 45,
     "avatar": "berlin",
     "videos": [
-      "19qKvZ2lVAgxHc9nQ1Tw_i0pTBzu0scJn"
+      {
+        "id": "19qKvZ2lVAgxHc9nQ1Tw_i0pTBzu0scJn",
+        "width": 1280,
+        "height": 720
+      }
     ]
   },
   {
@@ -155,7 +243,11 @@
     "lng": 21,
     "avatar": "paris",
     "videos": [
-      "1Yec13wcomkQfkMbLeBB37VIZAyfjAtkA"
+      {
+        "id": "1Yec13wcomkQfkMbLeBB37VIZAyfjAtkA",
+        "width": 478,
+        "height": 850
+      }
     ]
   },
   {
@@ -164,7 +256,11 @@
     "lng": 15,
     "avatar": "dublin",
     "videos": [
-      "1gESbiCPQjBkJ90G706fue0_sycgciyoD"
+      {
+        "id": "1gESbiCPQjBkJ90G706fue0_sycgciyoD",
+        "width": 1280,
+        "height": 720
+      }
     ]
   },
   {
@@ -173,7 +269,11 @@
     "lng": 5.3,
     "avatar": "london",
     "videos": [
-      "1L8iqIZvPAHBLCF_RpPrUx2qyhukk8VPj"
+      {
+        "id": "1L8iqIZvPAHBLCF_RpPrUx2qyhukk8VPj",
+        "width": 544,
+        "height": 960
+      }
     ]
   },
   {
@@ -182,8 +282,16 @@
     "lng": -102,
     "avatar": "mexico-city",
     "videos": [
-      "11olqdShaGg1HBRvjgrL7vSbN3Ez-2xcV",
-      "1gNNfdwsPvJNaprxgS0-yS-3nAkQIHjDB"
+      {
+        "id": "11olqdShaGg1HBRvjgrL7vSbN3Ez-2xcV",
+        "width": 544,
+        "height": 960
+      },
+      {
+        "id": "1gNNfdwsPvJNaprxgS0-yS-3nAkQIHjDB",
+        "width": 1080,
+        "height": 1920
+      }
     ]
   }
 ]
