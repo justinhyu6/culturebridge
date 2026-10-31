@@ -2,51 +2,494 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Culture Bridge Globe</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Globe playground</title>
   <link rel="stylesheet" href="./main.min.css">
   <style>
-    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #f4f5f1; }
-    #globe-container { width: 100%; height: 100%; aspect-ratio: auto; }
+    @font-face { font-family: Geist; src: url("./Geist-Variable.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #f4f5f1; }
+    #globe-frame { position:fixed; inset:0; }
+    #globe-container { width:100%; height:100%; }
+    .controls { max-height: calc(100vh - 40px); overflow-y: auto; box-sizing: border-box; position: fixed; z-index: 5; top: 20px; left: 20px; padding: 16px; width: 190px; border: 1px solid #d8e1de; border-radius: 16px; background: rgba(255,255,255,.94); box-shadow: 0 8px 30px #12352c16; font: 14px Geist,system-ui,sans-serif; color: #29453f; }
+    .controls h1 { margin: 0 0 12px; font-size: 15px; }
+    .controls label { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 5px 0; }
+    input[type=color] { width: 36px; height: 30px; padding: 2px; border: 1px solid #d8e1de; border-radius: 8px; background: white; cursor: pointer; }
+    .thickness { display: block !important; padding-top: 10px !important; }
+    .thickness span { display: flex; justify-content: space-between; }
+    input[type=range] { width: 100%; margin: 8px 0 0; accent-color: #315e55; }
+    button { width: 100%; margin-top: 10px; padding: 8px; border: 0; border-radius: 8px; background: #e9f0ed; color: #29453f; cursor: pointer; font: inherit; }
+    .profile { z-index: 100; box-sizing: border-box; left: 0; top: 0; width: 290px; padding: 12px 12px 12px 68px; min-height: 66px; }
+    .profile[hidden] { display: none; }
+    .profile-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; transform:translateY(-8px); }
+    .profile-header .close { transform:translateY(8px); }
+    .profile h2 { margin: 0; font-size: 15px; }
+    .profile p { margin: 3px 0 0; color: #526b64; transform:translateY(-8px); }
+    .profile-avatar { position: absolute; left: 8px; top: 6px; width: 48px; height: 48px; border: 2px solid white; border-radius: 50%; background: #e8d5b7; box-shadow: 0 3px 9px #0004; }
+    .profile-video:empty { display: none; }
+    .profile-video { margin: 12px 0 0 -56px; padding: 10px; border-radius: 8px; background: #eef3f0; color: #778b84; font-size: 12px; }
+    .profile-video strong { display: block; margin-bottom: 4px; color: #526b64; font-size: 12px; }
+    .profile.has-video { width: var(--card-width); min-height: 0; padding: 12px 12px 12px 68px; overflow-x: hidden; }
+    .profile.has-video .profile-avatar { left: 8px; top: 6px; width: 48px; height: 48px; transform: none; }
+    .profile.has-video .profile-header h2 { white-space: nowrap; }
+    .profile-video.has-video { width: var(--video-width); margin: 12px 0 0 -56px; padding: 0; background: transparent; }
+    .profile-video.has-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; }
+    .profile-flag { width: 25px; height: 19px; object-fit: cover; vertical-align: -4px; margin-right: 8px; border-radius: 2px; }
+    .profile .close { width: auto; margin: 0; padding: 4px 9px; font-size: 18px; line-height: 1; }
+    .globe-avatar { cursor: pointer; transition: transform 160ms ease, box-shadow 160ms ease; }
+    .globe-avatar:hover, .globe-avatar:focus-visible { transform: translateY(-2px) scale(1.08); box-shadow: 0 4px 10px #0008 !important; }
+    .globe-avatar:focus-visible { outline: 3px solid #366f9b; outline-offset: 3px; }
+    #browse { position:fixed; z-index:10; top:20px; right:20px; bottom:20px; width:340px; overflow:auto; color:#29453f; font:14px Geist,system-ui,sans-serif; background:rgba(255,255,255,.96); border:1px solid #d8e1de; border-radius:16px; box-shadow:0 8px 30px #12352c16; }
+    .browse-inner { padding:20px; }
+    .browse-inner h1 { font-size:15px; margin:0 0 12px; font-weight:650; }
+    .browse-search { box-sizing:border-box; width:100%; padding:11px 13px; border:1px solid #d8e1de; border-radius:9px; font:inherit; margin-bottom:14px; }
+    .region, .country { border-top:1px solid #e1e9e5; }
+    .region > summary, .country > summary { padding:14px 4px; cursor:pointer; font-weight:650; }
+    .country { margin-left:18px; }
+    .country > summary { font-weight:550; }
+    .country-flag { width:24px; height:17px; object-fit:cover; vertical-align:middle; margin:0 8px; border-radius:2px; }
+    .person-button { width:calc(100% - 22px); margin:0 0 8px 22px; padding:9px 10px; display:flex; align-items:center; gap:10px; text-align:left; background:#f1f5f2; }
+    .person-button:hover, .person-button:focus-visible { background:#e5eee9; outline:2px solid #9db9ad; outline-offset:1px; }
+    .person-button img { flex:0 0 auto; width:38px; height:38px; border:2px solid white; border-radius:50%; background:#e8d5b7; transition:transform 160ms ease; }
+    .person-button:hover img, .person-button:focus-visible img { transform:translateY(-2px) scale(1.08); }
+    .person-button small { display:block; margin-top:3px; color:#71867e; font-weight:400; }
+    @media(max-width:850px){ #browse { top:auto; left:12px; right:12px; bottom:12px; width:auto; max-height:40vh; } .browse-inner { padding:16px; } }
+    @media(max-width:600px){ .controls:not(.profile){top:12px;left:12px;width:150px;padding:12px} }
+      #browse, .controls:not(.profile) { display: none; }
   </style>
 </head>
 <body>
-  <div id="globe-container" aria-label="Interactive Culture Bridge globe"></div>
-  <script src="./main.min.js"></script>
-  <script>
-    new BrandGlobe({
-      container: '#globe-container',
-      padding: 18,
-      overflow: 80,
-      scale: 0.82,
-      colors: {
-        globe: '#004972',
-        accent: '#828282',
-        stroke: '#c9c9c9',
-        atmosphere: '#1d6791',
-        arcStart: '#ffaa3c',
-        arcEnd: '#ffaa3c',
-        hubPoint: '#ffffff',
-        hubRing: '#ffffff'
-      },
-      globe: { opacity: 1, shininess: 14 },
-      atmosphere: { enabled: true, altitude: 0.22 },
-      rotation: { enabled: true, speed: 0 },
-      interaction: { enabled: true },
-      initialView: { lat: 18, lng: 18, altitude: 1.7 },
-      polygons: {
-        enabled: true,
-        style: 'filled',
-        altitude: 0.008,
-        capOpacity: 0.88,
-        wireframe: { enabled: false, color: '#ffffff', opacity: 0 }
-      },
-      arcs: { enabled: false },
-      points: { enabled: false },
-      rings: { enabled: false },
-      hubs: [],
-      connections: []
+<section id="browse" aria-label="Browse videos by region"><div class="browse-inner"><h1>Browse by region</h1><input class="browse-search" id="browse-search" type="search" placeholder="Search regions, countries or cities" aria-label="Search regions, countries or cities"><div id="browse-results"></div></div></section>
+<div id="globe-frame"><div id="globe-container" aria-label="Interactive globe with 20 profile locations"></div></div>
+<aside class="controls" aria-label="Globe colors">
+  <h1>Globe colors</h1>
+  <label>Ocean <input id="ocean" type="color" value="#004972"></label>
+  <label>Countries <input id="land" type="color" value="#828282"></label>
+  <label>Borders <input id="borders" type="color" value="#c9c9c9"></label>
+  <label>Atmosphere <input id="atmosphere" type="color" value="#1d6791"></label>
+  <label>Background <input id="background" type="color" value="#f4f5f1"></label>
+  <label>Label color <input id="label-color" type="color" value="#ffffff"></label>
+  <label class="thickness"><span>Border thickness <output id="thickness-value">2</output></span><input id="thickness" type="range" min="0" max="8" step="1" value="2"></label>
+  <label class="thickness"><span>Text size <output id="label-size-value">10</output></span><input id="label-size" type="range" min="8" max="18" step="1" value="10"></label>
+  <label class="thickness"><span>Text weight <output id="label-weight-value">500</output></span><input id="label-weight" type="range" min="100" max="900" step="100" value="500"></label>
+  <button id="reset" type="button">Reset colors</button><p id="settings-status" role="status" style="font-size:12px;color:#a44337" hidden></p>
+</aside>
+<aside class="controls profile" id="profile" aria-label="Avatar details" hidden>
+  <img class="profile-avatar" id="profile-avatar" alt="">
+  <div class="profile-header"><h2>John Smith</h2><button class="close" id="close-profile" type="button" aria-label="Close avatar details">×</button></div>
+  <p><img class="profile-flag" id="profile-flag" alt=""><span id="profile-country"></span></p>
+  <div class="profile-video" id="profile-video"></div>
+</aside>
+<script src="./main.min.js"></script><script>
+const globe = new BrandGlobe({
+    container: '#globe-container', padding: 18, overflow: 80, scale: 0.65,
+    colors: { globe:'#004972', accent:'#828282', stroke:'#c9c9c9', atmosphere:'#1d6791', arcStart:'#ffaa3c', arcEnd:'#ffaa3c', hubPoint:'#ffffff', hubRing:'#ffffff' },
+    globe:{opacity:1,shininess:14}, atmosphere:{enabled:true,altitude:0.22}, rotation:{enabled:true,speed:0}, interaction:{enabled:true}, initialView:{lat:18,lng:18,altitude:1.7},
+    polygons:{enabled:true,style:'filled',altitude:0.008,capOpacity:0.88,wireframe:{enabled:false,color:'#ffffff',opacity:0}},
+    arcs:{enabled:true,strokeWidth:0.55,dashLength:1,dashGap:0,animateTime:0,altitudeAutoScale:0.45}, points:{enabled:false,radius:0.55,altitude:0.01}, rings:{enabled:false,maxRadius:3,propagationSpeed:1.6,repeatPeriod:1800},
+    hubs:[{name:'London',lat:51.5074,lng:-0.1278},{name:'New York',lat:40.7128,lng:-74.006},{name:'San Francisco',lat:37.7749,lng:-122.419},{name:'Tokyo',lat:35.6762,lng:139.6503},{name:'Dubai',lat:25.276,lng:55.2962},{name:'Sydney',lat:-33.8688,lng:151.2093},{name:'Sao Paulo',lat:-23.5505,lng:-46.6333}], connections:[]
+});
+
+// Paint the country shapes and their borders onto a local globe texture.
+// Duplicating wrapped rings handles countries that cross the date line.
+const countries = topojson.feature(WORLD_TOPO, WORLD_TOPO.objects.countries).features;
+globe.globe.polygonsData([]); globe.setGlobeColor('#ffffff');
+// Use the centroid of each country's largest outer ring for its label.
+const labels = countries.map(feature => {
+  const polygons = feature.geometry.type === 'Polygon' ? [feature.geometry.coordinates] : feature.geometry.coordinates;
+  let best = null;
+  for (const polygon of polygons) {
+    const points = polygon[0];
+    let previous, area = 0, xSum = 0, ySum = 0;
+    const unwrapped = points.map(([lng, lat]) => {
+      if (previous !== undefined) {
+        while (lng - previous > 180) lng -= 360;
+        while (lng - previous < -180) lng += 360;
+      }
+      previous = lng;
+      return [lng, lat];
     });
-  </script>
-</body>
-</html>
+    for (let i = 0; i < unwrapped.length - 1; i++) {
+      const [x1, y1] = unwrapped[i], [x2, y2] = unwrapped[i + 1];
+      const cross = x1 * y2 - x2 * y1;
+      area += cross; xSum += (x1 + x2) * cross; ySum += (y1 + y2) * cross;
+    }
+    if (area && (!best || Math.abs(area) > best.area)) {
+      best = { area: Math.abs(area), lng: ((xSum / (3 * area) + 540) % 360) - 180, lat: ySum / (3 * area) };
+    }
+  }
+  return best && { ...best, name: feature.properties.name };
+}).filter(label => label && label.area > 8);
+const waterLabels = [
+  {name:'Pacific Ocean',lat:0,lng:-155}, {name:'Pacific Ocean',lat:0,lng:155},
+  {name:'Atlantic Ocean',lat:0,lng:-30}, {name:'Indian Ocean',lat:-22,lng:78},
+  {name:'Arctic Ocean',lat:76,lng:0}, {name:'Southern Ocean',lat:-58,lng:0},
+  {name:'Caribbean Sea',lat:15,lng:-75}, {name:'Gulf of Mexico',lat:24,lng:-90},
+  {name:'Mediterranean Sea',lat:35,lng:18}, {name:'North Sea',lat:56,lng:3},
+  {name:'Baltic Sea',lat:58,lng:20}, {name:'Red Sea',lat:20,lng:38},
+  {name:'Arabian Sea',lat:15,lng:64}, {name:'Bay of Bengal',lat:15,lng:88},
+  {name:'South China Sea',lat:12,lng:115}, {name:'Sea of Japan',lat:40,lng:135},
+  {name:'Coral Sea',lat:-18,lng:150}, {name:'Tasman Sea',lat:-40,lng:160}
+];
+const mockProfiles = [
+  {name:'Vancouver',lat:49.2827,lng:-123.1207,country:['ca','Canada']},
+  {name:'Mexico City',lat:19.4326,lng:-99.1332,country:['mx','Mexico']},
+  {name:'Toronto',lat:43.6532,lng:-79.3832,country:['ca','Canada']},
+  {name:'Miami',lat:25.7617,lng:-80.1918,country:['us','United States']},
+  {name:'Dublin',lat:53.3498,lng:-6.2603,country:['ie','Ireland']},
+  {name:'Paris',lat:48.8566,lng:2.3522,country:['fr','France']},
+  {name:'Berlin',lat:52.52,lng:13.405,country:['de','Germany']},
+  {name:'Lagos',lat:6.5244,lng:3.3792,country:['ng','Nigeria']},
+  {name:'Nairobi',lat:-1.2921,lng:36.8219,country:['ke','Kenya']},
+  {name:'Cape Town',lat:-33.9249,lng:18.4241,country:['za','South Africa']},
+  {name:'Mumbai',lat:19.076,lng:72.8777,country:['in','India']},
+  {name:'Seoul',lat:37.5665,lng:126.978,country:['kr','South Korea']},
+  {name:'Singapore',lat:1.3521,lng:103.8198,country:['sg','Singapore']}
+];
+const countryByCity = {
+  'London': ['gb', 'United Kingdom'],
+  'New York': ['us', 'United States'],
+  'San Francisco': ['us', 'United States'],
+  'Tokyo': ['jp', 'Japan'],
+  'Dubai': ['ae', 'United Arab Emirates'],
+  'Sydney': ['au', 'Australia'],
+  'Sao Paulo': ['br', 'Brazil'],
+  ...Object.fromEntries(mockProfiles.map(profile => [profile.name, profile.country]))
+};
+
+const allHubs = [...globe.options.hubs, ...mockProfiles];
+const avatarMarkers = allHubs.map(hub => ({ ...hub, avatar: true }));
+const demoVideoCities = new Set(['London', 'New York', 'Tokyo', 'Paris', 'Nairobi']);
+const demoVideoUrl = 'https://learningbridges.org/wp-content/uploads/2026/09/Play-with-kids-2.mp4';
+
+const regionByCountry = { gb:'Europe', ie:'Europe', fr:'Europe', de:'Europe', us:'North America', ca:'North America', mx:'North America', br:'South America', jp:'Asia', ae:'Asia', in:'Asia', kr:'Asia', sg:'Asia', ng:'Africa', ke:'Africa', za:'Africa', au:'Australia & Oceania' };
+const browsePanel = document.getElementById('browse');
+const browseResults = document.getElementById('browse-results');
+const searchInput = document.getElementById('browse-search');
+function renderBrowse() {
+  const query = searchInput.value.trim().toLowerCase();
+  browseResults.replaceChildren();
+  const groups = new Map();
+  for (const hub of allHubs) {
+    const [code, country] = countryByCity[hub.name];
+    const region = regionByCountry[code];
+    if (query && ![region, country, hub.name, 'John Smith'].some(value => value.toLowerCase().includes(query))) continue;
+    if (!groups.has(region)) groups.set(region, new Map());
+    const countries = groups.get(region);
+    if (!countries.has(country)) countries.set(country, {code, profiles:[]});
+    countries.get(country).profiles.push(hub);
+  }
+  for (const [region, countries] of [...groups].sort(([a],[b]) => a.localeCompare(b))) {
+    const section = document.createElement('details'); section.className = 'region'; section.open = !!query;
+    const title = document.createElement('summary'); title.textContent = region; section.append(title);
+    for (const [country, group] of [...countries].sort(([a],[b]) => a.localeCompare(b))) {
+      const item = document.createElement('details'); item.className = 'country'; item.open = !!query;
+      const summary = document.createElement('summary');
+      const flag = document.createElement('img'); flag.className = 'country-flag'; flag.src = './flags/' + group.code + '.svg'; flag.alt = '';
+      summary.append(flag, document.createTextNode(country)); item.append(summary);
+      for (const hub of group.profiles) {
+        const button = document.createElement('button'); button.type = 'button'; button.className = 'person-button';
+        button.setAttribute('aria-label', `Open John Smith in ${hub.name} on the globe`);
+        const avatar = document.createElement('img'); avatar.src = './avatars/' + hub.name.toLowerCase().replaceAll(' ', '-') + '.svg'; avatar.alt = '';
+        const label = document.createElement('span'); const name = document.createElement('strong'); name.textContent = 'John Smith';
+        const city = document.createElement('small'); city.textContent = hub.name; label.append(name, city); button.append(avatar, label);
+        button.addEventListener('click', () => openLocationProfile(hub));
+        item.append(button);
+      }
+      section.append(item);
+    }
+    browseResults.append(section);
+  }
+  if (!groups.size) browseResults.textContent = 'No matching locations found.';
+}
+renderBrowse();
+searchInput.addEventListener('input', renderBrowse);
+
+let selectedAvatar = null;
+const profile = document.getElementById('profile');
+const videoArea = document.getElementById('profile-video');
+function clearVideo() {
+  const video = videoArea.querySelector('video');
+  if (video) video.pause();
+  videoArea.replaceChildren();
+}
+function showVideo(city) {
+  clearVideo();
+  const hasVideo = demoVideoCities.has(city);
+  videoArea.classList.toggle('has-video', hasVideo);
+  profile.classList.toggle('has-video', hasVideo);
+  if (!hasVideo) {
+    const heading = document.createElement('strong');
+    heading.textContent = 'Video';
+    videoArea.append(heading, document.createTextNode('No video yet'));
+    return;
+  }
+  const video = document.createElement('video');
+  video.src = demoVideoUrl;
+  video.controls = true;
+  video.preload = 'metadata';
+  video.playsInline = true;
+  video.setAttribute('aria-label', 'Profile video');
+  videoArea.append(video);
+}
+function openLocationProfile(hub) {
+  closeProfile();
+  globe.globe.pointOfView({ lat:hub.lat, lng:hub.lng, altitude:globe._effectiveAltitude() }, 700);
+  const started = Date.now();
+  const reveal = () => {
+    const marker = [...document.querySelectorAll('.globe-avatar')].find(image => image.title === hub.name);
+    if (marker && getComputedStyle(marker).opacity !== '0') { marker.click(); return; }
+    if (Date.now() - started < 2500) setTimeout(reveal, 100);
+  };
+  setTimeout(reveal, 750);
+}
+function closeProfile() {
+  profile.hidden = true;
+  profile.classList.remove('has-video');
+  clearVideo();
+  if (selectedAvatar) { selectedAvatar.style.visibility = ''; selectedAvatar.style.transform = ''; }
+  selectedAvatar = null;
+}
+function positionProfile() {
+  if (!selectedAvatar || profile.hidden) return;
+  if (selectedAvatar.style.opacity === '0' || !selectedAvatar.isConnected) { closeProfile(); return; }
+  const rect = selectedAvatar.getBoundingClientRect();
+  if (profile.classList.contains('has-video')) {
+    const cardLeft = rect.left - 9;
+    const cardTop = rect.top - 7;
+    const availableWidth = Math.max(160, innerWidth - cardLeft - 8);
+    const availableHeight = Math.max(72, innerHeight - cardTop - 102);
+    const cardWidth = Math.min(444, availableWidth);
+    const videoWidth = Math.max(120, Math.min(420, cardWidth - 24, availableHeight * 16 / 9));
+    profile.style.setProperty('--card-width', `${cardWidth}px`);
+    profile.style.setProperty('--video-width', `${videoWidth}px`);
+    profile.style.left = `${cardLeft}px`;
+    profile.style.top = `${cardTop}px`;
+    return;
+  }
+  const left = rect.left - 9;
+  const top = rect.top - 7;
+  profile.style.left = `${Math.max(8, Math.min(left, innerWidth - profile.offsetWidth - 8))}px`;
+  profile.style.top = `${Math.max(8, Math.min(top, innerHeight - profile.offsetHeight - 8))}px`;
+}
+
+globe.globe.htmlElementsData([...labels.filter(label => label.area > 100), ...waterLabels.map(label => ({...label, water:true})), ...avatarMarkers])
+  .htmlLat('lat')
+  .htmlLng('lng')
+  .htmlAltitude(0.012)
+  .htmlElement(label => {
+    if (label.avatar) {
+      const marker = document.createElement('div');
+      const image = document.createElement('img');
+      image.src = './avatars/' + label.name.toLowerCase().replaceAll(' ', '-') + '.svg';
+      image.alt = 'Profile in ' + label.name;
+      image.title = label.name;
+      image.dataset.lat = label.lat;
+      image.dataset.lng = label.lng;
+      image.className = 'globe-avatar';
+      image.setAttribute('role', 'button');
+      image.setAttribute('tabindex', '0');
+      image.setAttribute('aria-label', 'Show John Smith in ' + countryByCity[label.name][1]);
+      image.style.cssText = 'width:48px;height:48px;border:2px solid white;border-radius:50%;background:#e8d5b7;box-shadow:0 2px 7px #0006;pointer-events:auto;opacity:0;transition:opacity 150ms, transform 160ms ease, box-shadow 160ms ease';
+      const openProfile = event => {
+        event.stopPropagation();
+        const [flag, country] = countryByCity[label.name];
+        document.getElementById('profile-flag').src = './flags/' + flag + '.svg';
+        document.getElementById('profile-country').textContent = country;
+        if (selectedAvatar) { selectedAvatar.style.visibility = ''; selectedAvatar.style.transform = ''; }
+        selectedAvatar = image;
+        image.style.transform = getComputedStyle(image).transform;
+        const profileAvatar = document.getElementById('profile-avatar');
+        profileAvatar.src = image.src;
+        profileAvatar.style.width = `${image.getBoundingClientRect().width - 4}px`;
+        profileAvatar.style.height = `${image.getBoundingClientRect().height - 4}px`;
+        showVideo(label.name);
+        profile.hidden = false;
+        positionProfile();
+        image.style.visibility = 'hidden';
+      };
+      image.addEventListener('click', openProfile);
+      image.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openProfile(event); }
+      });
+      marker.append(image);
+      return marker;
+    }
+    const element = document.createElement('span');
+    element.textContent = label.name;
+    element.dataset.lat = label.lat;
+    element.dataset.lng = label.lng;
+    element.className = label.water ? 'water-label' : 'country-label';
+    element.style.cssText = label.water ? 'color:#c5e1ea;font:500 9px/1.1 Geist,system-ui,sans-serif;font-style:italic;white-space:nowrap;letter-spacing:.02em;pointer-events:none;text-shadow:0 1px 2px rgba(0,35,50,.8);opacity:0;transition:opacity 150ms' : 'color:var(--label-color,#ffffff);font:var(--label-weight,500) var(--label-size,10px)/1.1 Geist,system-ui,sans-serif;white-space:nowrap;letter-spacing:.01em;pointer-events:none;text-shadow:0 1px 1px rgba(20,38,42,.35);opacity:0;transition:opacity 150ms';
+    return element;
+  });
+function updateLabelVisibility() {
+  const view = globe.globe.pointOfView();
+  const radians = Math.PI / 180;
+  document.querySelectorAll('.country-label, .water-label, .globe-avatar').forEach(element => {
+    const lat = Number(element.dataset.lat) * radians;
+    const centerLat = view.lat * radians;
+    const longitudeDifference = (Number(element.dataset.lng) - view.lng) * radians;
+    const facing = Math.sin(lat) * Math.sin(centerLat) + Math.cos(lat) * Math.cos(centerLat) * Math.cos(longitudeDifference);
+    const visible = facing > (element.classList.contains('globe-avatar') ? 0.5 : 0.65);
+    element.style.opacity = visible ? '1' : '0';
+    if (element.classList.contains('globe-avatar')) {
+      element.style.pointerEvents = visible ? 'auto' : 'none';
+      element.tabIndex = visible ? 0 : -1;
+    }
+  });
+  positionProfile();
+}
+globe.globe.controls().addEventListener('change', updateLabelVisibility);
+setInterval(updateLabelVisibility, 200);
+document.getElementById('close-profile').addEventListener('click', closeProfile);
+function paintMap() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 2048; canvas.height = 1024;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = inputs.ocean.value;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = inputs.land.value;
+  ctx.strokeStyle = inputs.borders.value;
+  const borderWidth = Number(document.getElementById('thickness').value);
+  ctx.lineWidth = Math.max(1, borderWidth);
+  for (const feature of countries) {
+    const polygons = feature.geometry.type === 'Polygon' ? [feature.geometry.coordinates] : feature.geometry.coordinates;
+    for (const polygon of polygons) {
+      for (const shift of [-canvas.width, 0, canvas.width]) {
+        ctx.beginPath();
+        for (const ring of polygon) {
+          let previousX;
+          ring.forEach(([lng, lat], index) => {
+            let x = (lng + 180) / 360 * canvas.width;
+            if (previousX !== undefined) {
+              while (x - previousX > canvas.width / 2) x -= canvas.width;
+              while (x - previousX < -canvas.width / 2) x += canvas.width;
+            }
+            previousX = x;
+            const y = (90 - lat) / 180 * canvas.height;
+            if (index === 0) ctx.moveTo(x + shift, y); else ctx.lineTo(x + shift, y);
+          });
+          ctx.closePath();
+        }
+        ctx.fill('evenodd'); if (borderWidth > 0) ctx.stroke();
+      }
+    }
+  }
+  globe.globe.globeImageUrl(canvas.toDataURL());
+}
+
+const inputs = Object.fromEntries(['ocean', 'land', 'borders', 'atmosphere', 'background', 'label-color'].map(id => [id, document.getElementById(id)]));
+const thickness = document.getElementById('thickness');
+const labelSize = document.getElementById('label-size');
+const labelWeight = document.getElementById('label-weight');
+const storageKey = 'learningbridge-globe-settings-v1';
+function applySavedSettings(saved) {
+  if (!saved || typeof saved !== 'object') return;
+  for (const [id, input] of Object.entries(inputs)) {
+    if (typeof saved[id] === 'string' && /^#[0-9a-f]{6}$/i.test(saved[id])) input.value = saved[id];
+  }
+  if (Number.isInteger(saved.thickness) && saved.thickness >= 0 && saved.thickness <= 8) thickness.value = saved.thickness;
+  if (Number.isInteger(saved.labelSize) && saved.labelSize >= 8 && saved.labelSize <= 18) labelSize.value = saved.labelSize;
+  if (Number.isInteger(saved.labelWeight) && saved.labelWeight >= 100 && saved.labelWeight <= 900 && saved.labelWeight % 100 === 0) labelWeight.value = saved.labelWeight;
+}
+document.getElementById('thickness-value').value = thickness.value;
+function applyLabelStyle() {
+  document.documentElement.style.setProperty('--label-color', inputs['label-color'].value);
+  document.documentElement.style.setProperty('--label-size', labelSize.value + 'px');
+  document.documentElement.style.setProperty('--label-weight', labelWeight.value);
+  document.getElementById('label-size-value').value = labelSize.value;
+  document.getElementById('label-weight-value').value = labelWeight.value;
+}
+const settingsStatus = document.getElementById('settings-status');
+let saveQueue = Promise.resolve();
+function currentSettings() {
+  return { ...Object.fromEntries(Object.entries(inputs).map(([id, input]) => [id, input.value])),
+    thickness: Number(thickness.value), labelSize: Number(labelSize.value), labelWeight: Number(labelWeight.value) };
+}
+function saveSettings() {
+  const snapshot = currentSettings();
+  saveQueue = saveQueue.catch(() => {}).then(async () => {
+    const response = await fetch('/__settings', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(snapshot) });
+    if (!response.ok) throw new Error('Could not save settings');
+    settingsStatus.hidden = true;
+  }).catch(error => {
+    settingsStatus.textContent = 'Settings could not be saved. Start the local demo server and try again.';
+    settingsStatus.hidden = false;
+    throw error;
+  });
+  return saveQueue;
+}
+function applyColors() {
+  paintMap();
+  globe.setAtmosphereColor(inputs.atmosphere.value);
+  document.body.style.backgroundColor = inputs.background.value;
+  applyLabelStyle();
+}
+const settingsControls = [...Object.values(inputs), thickness, labelSize, labelWeight, document.getElementById('reset')];
+settingsControls.forEach(control => { control.disabled = true; });
+async function initializeSettings() {
+  try {
+    const response = await fetch('/__settings', { cache:'no-store' });
+    if (!response.ok) throw new Error('Settings unavailable');
+    const saved = await response.json();
+    if (saved) applySavedSettings(saved);
+    else {
+      let legacy = null;
+      try { legacy = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) {}
+      if (legacy && typeof legacy === 'object') {
+        applySavedSettings(legacy);
+        await saveSettings();
+        try { localStorage.removeItem(storageKey); } catch (_) {}
+      }
+    }
+  } catch (_) {
+    settingsStatus.textContent = 'Settings could not be loaded. Start the local demo server and try again.';
+    settingsStatus.hidden = false;
+  }
+  document.getElementById('thickness-value').value = thickness.value;
+  applyColors();
+  settingsControls.forEach(control => { control.disabled = false; });
+}
+Object.values(inputs).forEach(input => input.addEventListener('input', () => { applyColors(); saveSettings().catch(() => {}); }));
+thickness.addEventListener('input', () => {
+  document.getElementById('thickness-value').value = thickness.value;
+  paintMap();
+  saveSettings().catch(() => {});
+});
+[labelSize, labelWeight].forEach(input => input.addEventListener('input', () => { applyLabelStyle(); saveSettings().catch(() => {}); }));
+document.getElementById('reset').addEventListener('click', () => {
+  Object.values(inputs).forEach(input => { input.value = input.defaultValue; });
+  thickness.value = thickness.defaultValue;
+  labelSize.value = labelSize.defaultValue;
+  labelWeight.value = labelWeight.defaultValue;
+  document.getElementById('thickness-value').value = thickness.value;
+  applyColors();
+  saveSettings().catch(() => {});
+});
+applySavedSettings({"ocean": "#004972", "land": "#f2dfca", "borders": "#004972", "atmosphere": "#1d6791", "background": "#f4f5f1", "label-color": "#ffffff", "thickness": 1, "labelSize": 13, "labelWeight": 400});
+applyColors();
+
+// The local development server exposes a version; a change reloads this page.
+if (['localhost', '127.0.0.1'].includes(location.hostname)) {
+  let version;
+  setInterval(async () => {
+    try {
+      const response = await fetch('/__version', { cache: 'no-store' });
+      if (!response.ok) return;
+      const current = await response.text();
+      if (version !== undefined && current !== version) location.reload();
+      version = current;
+    } catch (_) { /* Retry when the development server is available. */ }
+  }, 1000);
+}
+</script></body></html>
+
+
+
+
+
+
+
+
+
+
