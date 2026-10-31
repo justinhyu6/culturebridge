@@ -28,7 +28,7 @@
     #video-choices:empty { display:none; }
     .video-choice { font-size:12px; }
     .video-choice[aria-pressed=true] { color:white; background:#17324d; }
-    #player { display:block; width:100%; height:auto; aspect-ratio:16/9; max-height:calc(100vh - 95px); border:0; border-radius:8px; background:#17324d; }
+    #player { display:block; width:min(100%, max(160px, calc(177.78vh - 258px))); height:auto; aspect-ratio:16/9; margin-inline:auto; border:0; border-radius:8px; background:#17324d; }
     #country-picker { position:fixed; z-index:10; left:8px; bottom:8px; width:auto; max-width:145px; border:1px solid #cbd6d0; border-radius:7px; background:#faf8f3ee; color:#17324d; padding:5px; font:600 11px Geist,system-ui,sans-serif; }
     #status { position:fixed; z-index:30; left:8px; top:8px; margin:0; background:#faf8f3; color:#17324d; }
   </style>
