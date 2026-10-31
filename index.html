@@ -81,7 +81,7 @@
 </aside>
 <script src="./main.min.js"></script><script>
 const globe = new BrandGlobe({
-    container: '#globe-container', padding: 18, overflow: 80, scale: 0.65,
+    container: '#globe-container', padding: 18, overflow: 80, scale: 0.9,
     colors: { globe:'#004972', accent:'#828282', stroke:'#c9c9c9', atmosphere:'#1d6791', arcStart:'#ffaa3c', arcEnd:'#ffaa3c', hubPoint:'#ffffff', hubRing:'#ffffff' },
     globe:{opacity:1,shininess:14}, atmosphere:{enabled:true,altitude:0.22}, rotation:{enabled:true,speed:0}, interaction:{enabled:true}, initialView:{lat:18,lng:18,altitude:1.7},
     polygons:{enabled:true,style:'filled',altitude:0.008,capOpacity:0.88,wireframe:{enabled:false,color:'#ffffff',opacity:0}},
@@ -466,7 +466,7 @@ document.getElementById('reset').addEventListener('click', () => {
   applyColors();
   saveSettings().catch(() => {});
 });
-applySavedSettings({"ocean": "#004972", "land": "#f2dfca", "borders": "#004972", "atmosphere": "#1d6791", "background": "#f4f5f1", "label-color": "#ffffff", "thickness": 1, "labelSize": 13, "labelWeight": 400});
+applySavedSettings({"ocean": "#004972", "land": "#f2dfca", "borders": "#004972", "atmosphere": "#1d6791", "background": "#f4f5f1", "label-color": "#ffffff", "thickness": 1, "labelSize": 10, "labelWeight": 400});
 applyColors();
 
 // The local development server exposes a version; a change reloads this page.
