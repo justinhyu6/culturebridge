@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Browse Culture Bridge stories</title>
+<style>
+@font-face { font-family:Geist; src:url('./Geist-Variable.woff2') format('woff2'); font-weight:100 900; font-display:swap; }
+* {box-sizing:border-box} body {margin:0;background:#faf8f3;color:#17324d;font:14px Geist,system-ui,sans-serif}
+.browser {padding:16px 20px 20px;border:1px solid #e3e8e4;border-radius:14px;background:#fff}
+.search {width:100%;padding:10px 12px;margin-bottom:12px;border:1px solid #d8e1de;border-radius:8px;font:inherit;color:inherit}
+details {border-top:1px solid #e1e9e5} summary {padding:12px 3px;font-weight:650;cursor:pointer;list-style:none} summary::-webkit-details-marker {display:none} summary::before {content:'›';display:inline-block;margin-right:10px;color:#286b8f;transition:transform .15s} details[open]>summary::before {transform:rotate(90deg)}
+.country {display:flex;align-items:center;gap:9px;width:calc(100% - 18px);margin-left:18px;padding:11px 10px;border:0;border-top:1px solid #e1e9e5;background:transparent;color:#17324d;text-align:left;cursor:pointer;font:550 14px Geist,system-ui,sans-serif}
+.country:hover,.country:focus-visible {background:#eef4f0;outline:2px solid #9db9ad;outline-offset:-2px;border-radius:6px}
+.flag {width:23px;height:17px;object-fit:cover;border-radius:2px}.empty {color:#526b64;font-size:13px}
+</style>
+</head>
+<body><main class="browser"><input class="search" id="search" type="search" placeholder="Search regions or countries" aria-label="Search regions or countries"><div id="results"></div></main>
+<script>
+const regions={Algeria:'Africa',Nigeria:'Africa',China:'Asia',Indonesia:'Asia',Japan:'Asia','North Korea':'Asia',Philippines:'Asia',Singapore:'Asia','South Korea':'Asia',Thailand:'Asia',Australia:'Australia & Oceania',Denmark:'Europe','United Kingdom':'Europe',Germany:'Europe',Poland:'Europe',Russia:'Europe',Serbia:'Europe',Sweden:'Europe',Netherlands:'Europe',Mexico:'North America'};
+const flags={Algeria:'dz',Nigeria:'ng',China:'cn',Indonesia:'id',Japan:'jp','North Korea':'kp',Philippines:'ph',Singapore:'sg','South Korea':'kr',Thailand:'th',Australia:'au',Denmark:'dk','United Kingdom':'gb',Germany:'de',Poland:'pl',Russia:'ru',Serbia:'rs',Sweden:'se',Netherlands:'nl',Mexico:'mx'};
+const results=document.getElementById('results'),search=document.getElementById('search'); let entries=[];
+function openCountry(entry) {
+  if(window.parent===window)return;
+  for(let i=0;i<window.parent.frames.length;i++){
+    try{window.parent.frames[i].postMessage({type:'culturebridge:open',country:entry.country,index:0},location.origin);}catch(_){}
+  }
+  window.parent.postMessage({type:'culturebridge:country-selected'},'*');
+}
+function render() {
+  const q=search.value.trim().toLowerCase();results.replaceChildren();const grouped=new Map();
+  for(const entry of entries){const region=regions[entry.country];if(!region || (q&&!region.toLowerCase().includes(q)&&!entry.country.toLowerCase().includes(q)))continue;if(!grouped.has(region))grouped.set(region,[]);grouped.get(region).push(entry)}
+  for(const [region,countries] of [...grouped].sort((a,b)=>a[0].localeCompare(b[0]))) {
+    const regionBox=document.createElement('details');regionBox.open=!!q;const heading=document.createElement('summary');heading.textContent=region;regionBox.append(heading);
+    for(const entry of countries.sort((a,b)=>a.country.localeCompare(b.country))){
+      const button=document.createElement('button');button.type='button';button.className='country';
+      button.setAttribute('aria-label','Show '+entry.country+' on the globe');
+      const flag=document.createElement('img');flag.className='flag';flag.alt='';flag.src='./flags/'+flags[entry.country]+'.svg';
+      const name=document.createElement('span');name.textContent=entry.country;
+      button.append(flag,name);button.addEventListener('click',()=>openCountry(entry));regionBox.append(button);
+    }results.append(regionBox);
+  }
+  if(!grouped.size){const empty=document.createElement('p');empty.className='empty';empty.textContent='No matching countries found.';results.append(empty)}
+}
+search.addEventListener('input',render);
+fetch('./videos.json').then(response=>{if(!response.ok)throw new Error('Could not load profiles');return response.json()}).then(data=>{entries=data;render()}).catch(()=>{results.textContent='Profiles could not be loaded.'});
+</script>
+</body>
+</html>
