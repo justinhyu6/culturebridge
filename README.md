@@ -12,3 +12,5 @@ python -m http.server 8000 --bind 127.0.0.1
 Open http://127.0.0.1:8000/ and press Ctrl+C in the terminal to stop. Refresh after changes.
 
 Commit and push changes to `main` to publish through GitHub Pages at https://justinhyu6.github.io/culturebridge/.
+
+The WordPress page embeds `index.html` for the globe and `browse.html` beneath the hero for the region → country → profile browser. Both use `videos.json`; selections in the browser also open the corresponding profile on the globe. The browser provides its own inline player so visitors can watch without scrolling back up.

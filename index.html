@@ -18,12 +18,12 @@
     #profile { position:fixed; z-index:20; left:8px; top:8px; width:min(420px,calc(100% - 16px)); max-height:calc(100% - 16px); overflow:auto; background:#faf8f3; border:1px solid #d4ddd8; border-radius:14px; box-shadow:0 7px 24px #17324d44; padding:10px; }
     #profile[hidden] { display:none; }
     .profile-header { display:flex; align-items:center; gap:10px; min-height:40px; }
-    .profile-country { display:flex; align-items:center; gap:7px; flex:1; min-width:0; }
+    .profile-country { display:flex; align-items:center; gap:7px; flex:0 1 auto; min-width:0; }
     .profile-flag { width:25px; height:19px; object-fit:cover; border-radius:2px; }
     .profile-header h2 { margin:0; font-size:16px; }
-    .profile-header button, .video-choice { border:0; border-radius:6px; padding:5px 9px; cursor:pointer; color:#17324d; background:#e9f0ed; font:inherit; }
-    .profile-header button { font-size:20px; line-height:1; }
-    #video-choices { display:flex; flex-wrap:wrap; gap:5px; margin:8px 0; }
+    .profile-header .close, .video-choice { border:0; border-radius:6px; padding:5px 9px; cursor:pointer; color:#17324d; background:#e9f0ed; font:inherit; }
+    .profile-header .close { font-size:20px; line-height:1; margin-left:auto; }
+    #video-choices { display:flex; flex-wrap:wrap; align-items:center; gap:4px; margin:0; }
     #video-choices:empty { display:none; }
     .video-choice { padding:2px; line-height:0; background:transparent; border:2px solid transparent; border-radius:50%; }
     .video-choice img { width:32px; height:32px; border-radius:50%; background:#e8d5b7; }
@@ -31,18 +31,14 @@
     .video-choice:focus-visible { outline:2px solid #286b8f; outline-offset:2px; }
     #player-frame { position:relative; width:100%; aspect-ratio:var(--video-ratio, 16/9); margin-inline:auto; overflow:hidden; border-radius:8px; background:#17324d; }
     #player { position:absolute; left:0; top:0; border:0; transform-origin:top left; background:#17324d; }
-    #country-picker { position:fixed; z-index:10; left:8px; bottom:8px; width:auto; max-width:145px; border:1px solid #cbd6d0; border-radius:7px; background:#faf8f3ee; color:#17324d; padding:5px; font:600 11px Geist,system-ui,sans-serif; }
     #status { position:fixed; z-index:30; left:8px; top:8px; margin:0; background:#faf8f3; color:#17324d; }
   </style>
 </head>
 <body>
   <div id="globe-container" aria-label="Interactive globe with countries that have videos"></div>
-  <label for="country-picker" style="position:absolute;left:-10000px">Choose a country with videos</label>
-  <select id="country-picker" aria-label="Choose a country with videos"><option value="">Find a country</option></select>
   <p id="status" role="status" hidden></p>
   <section id="profile" aria-label="Country videos" hidden>
-    <div class="profile-header"><div class="profile-country"><img id="profile-flag" class="profile-flag" alt=""><h2 id="profile-title"></h2></div><button id="close-profile" type="button" aria-label="Close videos">×</button></div>
-    <div id="video-choices" aria-label="Choose a profile"></div>
+    <div class="profile-header"><div class="profile-country"><img id="profile-flag" class="profile-flag" alt=""><h2 id="profile-title"></h2></div><div id="video-choices" aria-label="Choose a profile"></div><button id="close-profile" class="close" type="button" aria-label="Close videos">×</button></div>
     <div id="player-frame"><iframe id="player" title="Country video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
   </section>
   <script src="./main.min.js"></script>
@@ -84,7 +80,7 @@
   }
   globe.globe.globeImageUrl(canvas.toDataURL());
   const profile=document.getElementById('profile'), player=document.getElementById('player'), playerFrame=document.getElementById('player-frame');
-  const picker=document.getElementById('country-picker'), choices=document.getElementById('video-choices');
+  const choices=document.getElementById('video-choices');
   const flagCodes={Algeria:'dz',Nigeria:'ng',China:'cn',Indonesia:'id',Japan:'jp','North Korea':'kp',Philippines:'ph',Singapore:'sg','South Korea':'kr',Thailand:'th',Australia:'au',Denmark:'dk','United Kingdom':'gb',Germany:'de',Poland:'pl',Russia:'ru',Serbia:'rs',Sweden:'se',Netherlands:'nl',Mexico:'mx'};
   let currentCountry=null, currentMarker=null, currentVideo=null;
   function restoreMarker() {
@@ -119,7 +115,7 @@
     const maxVideoWidth=availableHeight*currentVideo.width/currentVideo.height;
     playerFrame.style.maxWidth=maxVideoWidth+'px';
     playerFrame.style.setProperty('--video-ratio',currentVideo.width+' / '+currentVideo.height);
-    profile.style.width=Math.min(420,innerWidth-16,Math.max(220,maxVideoWidth+20))+'px';
+    profile.style.width=Math.min(420,innerWidth-16,Math.max(300,maxVideoWidth+20))+'px';
     scaleDrivePlayer();
     positionProfile();
   }
@@ -148,10 +144,10 @@
       const image=document.createElement('img'); image.src='./avatars/'+video.avatar+'.svg'; image.alt='';
       button.append(image); button.addEventListener('click',()=>showCountry(entry,false,i)); choices.append(button);
     });
-    selectVideo(entry,index); profile.hidden=false; picker.value=entry.country; positionProfile();
+    selectVideo(entry,index); profile.hidden=false; positionProfile();
     if(fly) globe.globe.pointOfView({lat:entry.lat,lng:entry.lng,altitude:globe._effectiveAltitude()},700);
   }
-  document.getElementById('close-profile').addEventListener('click',()=>{ profile.hidden=true; player.removeAttribute('src'); picker.value=''; currentCountry=null; currentVideo=null; restoreMarker(); });
+  document.getElementById('close-profile').addEventListener('click',()=>{ profile.hidden=true; player.removeAttribute('src'); currentCountry=null; currentVideo=null; restoreMarker(); });
   function updateVisibility() {
     const view=globe.globe.pointOfView(), radians=Math.PI/180;
     document.querySelectorAll('.country-marker').forEach(marker=>{
@@ -165,8 +161,12 @@
   }
   fetch('./videos.json').then(response=>{ if(!response.ok)throw new Error('Could not load the video list'); return response.json(); }).then(entries=>{
     entries.sort((a,b)=>a.country.localeCompare(b.country));
-    for(const entry of entries) { const option=document.createElement('option'); option.value=entry.country; option.textContent=entry.country; picker.append(option); }
-    picker.addEventListener('change',()=>{ const entry=entries.find(item=>item.country===picker.value); if(entry)showCountry(entry,true); });
+    window.addEventListener('message',event=>{
+      if(event.origin!==location.origin || !event.data || event.data.type!=='culturebridge:open') return;
+      const entry=entries.find(item=>item.country===event.data.country);
+      const index=event.data.index;
+      if(entry && Number.isInteger(index) && index>=0 && index<entry.videos.length) showCountry(entry,true,index);
+    });
     const markers=entries.flatMap(entry=>entry.videos.map((video,index)=>({...entry, videoIndex:index})));
     globe.globe.htmlElementsData(markers).htmlLat('lat').htmlLng('lng').htmlAltitude(0.012).htmlElement(entry=>{
       const marker=document.createElement('button'); marker.type='button'; marker.className='country-marker';
