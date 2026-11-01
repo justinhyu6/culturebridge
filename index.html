@@ -102,8 +102,10 @@
     if(!currentVideo) return;
     const visibleWidth=playerFrame.clientWidth;
     if(!visibleWidth) return;
-    // Drive's player has a minimum layout width; scale its whole viewport on narrow screens.
-    const layoutWidth=Math.max(320,visibleWidth);
+    // Drive's playback iframe requires both 320px width and 300px height.
+    // Meet both minimums before scaling, so playback cannot add a black band
+    // or clip the bottom of a landscape video inside a shorter viewport.
+    const layoutWidth=Math.ceil(Math.max(320,visibleWidth,300*currentVideo.width/currentVideo.height));
     player.style.width=layoutWidth+'px';
     player.style.height=(layoutWidth*currentVideo.height/currentVideo.width)+'px';
     player.style.transform='scale('+(visibleWidth/layoutWidth)+')';
