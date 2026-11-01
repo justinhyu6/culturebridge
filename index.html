@@ -29,7 +29,7 @@
     .video-choice img { width:32px; height:32px; border-radius:50%; background:#e8d5b7; }
     .video-choice[aria-pressed=true] { border-color:#286b8f; }
     .video-choice:focus-visible { outline:2px solid #286b8f; outline-offset:2px; }
-    #player-frame { position:relative; width:100%; aspect-ratio:var(--video-ratio, 16/9); margin-inline:auto; overflow:hidden; border-radius:8px; background:#17324d; }
+    #player-frame { margin-top:12px; position:relative; width:100%; aspect-ratio:var(--video-ratio, 16/9); margin-inline:auto; overflow:hidden; border-radius:8px; background:#17324d; }
     #player { position:absolute; left:0; top:0; border:0; transform-origin:top left; background:#17324d; }
     #status { position:fixed; z-index:30; left:8px; top:8px; margin:0; background:#faf8f3; color:#17324d; }
   </style>
@@ -131,7 +131,7 @@
     restoreMarker();
     currentCountry=entry; document.getElementById('profile-title').textContent=entry.country;
     document.getElementById('profile-flag').src='./flags/'+flagCodes[entry.country]+'.svg';
-    currentMarker=[...document.querySelectorAll('.country-marker')].find(marker=>marker.dataset.country===entry.country && Number(marker.dataset.videoIndex)===index) || null;
+    currentMarker=[...document.querySelectorAll('.country-marker')].find(marker=>marker.dataset.country===entry.country && Number(marker.dataset.videoIndex)===(entry.country==='Germany'?0:index)) || null;
     if(currentMarker) {
       const image=currentMarker.querySelector('img');
       image.style.transform=getComputedStyle(image).transform;
@@ -167,13 +167,13 @@
       const index=event.data.index;
       if(entry && Number.isInteger(index) && index>=0 && index<entry.videos.length) showCountry(entry,true,index);
     });
-    const markers=entries.flatMap(entry=>entry.videos.map((video,index)=>({...entry, videoIndex:index})));
+    const markers=entries.flatMap(entry=>(entry.country==='Germany' ? entry.videos.slice(0,1) : entry.videos).map((video,index)=>({...entry, videoIndex:index, markerCount:entry.country==='Germany'?1:entry.videos.length})));
     globe.globe.htmlElementsData(markers).htmlLat('lat').htmlLng('lng').htmlAltitude(0.012).htmlElement(entry=>{
       const marker=document.createElement('button'); marker.type='button'; marker.className='country-marker';
-      marker.dataset.lat=entry.lat; marker.dataset.lng=entry.lng; marker.dataset.country=entry.country; marker.dataset.videoIndex=entry.videoIndex; marker.setAttribute('aria-label',entry.country+(entry.videos.length>1?' story '+(entry.videoIndex+1)+' of '+entry.videos.length:' story'));
-      if(entry.videos.length>1) marker.style.translate=((entry.videoIndex-(entry.videos.length-1)/2)*42)+'px 0';
+      marker.dataset.lat=entry.lat; marker.dataset.lng=entry.lng; marker.dataset.country=entry.country; marker.dataset.videoIndex=entry.videoIndex; marker.setAttribute('aria-label',entry.country+(entry.markerCount>1?' story '+(entry.videoIndex+1)+' of '+entry.videos.length:' stories'));
+      if(entry.markerCount>1) marker.style.translate=((entry.videoIndex-(entry.markerCount-1)/2)*42)+'px 0';
       const avatar=document.createElement('img'); avatar.src='./avatars/'+entry.videos[entry.videoIndex].avatar+'.svg'; avatar.alt='';
-      const label=document.createElement('span'); label.textContent=entry.videoIndex===Math.floor((entry.videos.length-1)/2)?entry.country:'\u00a0'; marker.append(avatar,label);
+      const label=document.createElement('span'); label.textContent=entry.videoIndex===Math.floor((entry.markerCount-1)/2)?entry.country:'\u00a0'; marker.append(avatar,label);
       marker.addEventListener('click',event=>{event.stopPropagation();showCountry(entry,false,entry.videoIndex);}); return marker;
     });
     globe.globe.controls().addEventListener('change',updateVisibility); setInterval(updateVisibility,200); updateVisibility();
