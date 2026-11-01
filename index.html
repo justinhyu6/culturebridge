@@ -18,7 +18,6 @@
     #profile { position:fixed; z-index:20; left:8px; top:8px; width:min(420px,calc(100% - 16px)); max-height:calc(100% - 16px); overflow:auto; background:#faf8f3; border:1px solid #d4ddd8; border-radius:14px; box-shadow:0 7px 24px #17324d44; padding:10px; }
     #profile[hidden] { display:none; }
     .profile-header { display:flex; align-items:center; gap:10px; min-height:40px; }
-    .profile-avatar { width:38px; height:38px; flex:none; border:2px solid white; border-radius:50%; background:#e8d5b7; box-shadow:0 2px 6px #0005; }
     .profile-country { display:flex; align-items:center; gap:7px; flex:1; min-width:0; }
     .profile-flag { width:25px; height:19px; object-fit:cover; border-radius:2px; }
     .profile-header h2 { margin:0; font-size:16px; }
@@ -42,8 +41,8 @@
   <select id="country-picker" aria-label="Choose a country with videos"><option value="">Find a country</option></select>
   <p id="status" role="status" hidden></p>
   <section id="profile" aria-label="Country videos" hidden>
-    <div class="profile-header"><img id="profile-avatar" class="profile-avatar" alt=""><div class="profile-country"><img id="profile-flag" class="profile-flag" alt=""><h2 id="profile-title"></h2></div><button id="close-profile" type="button" aria-label="Close videos">×</button></div>
-    <div id="video-choices" aria-label="Choose a video"></div>
+    <div class="profile-header"><div class="profile-country"><img id="profile-flag" class="profile-flag" alt=""><h2 id="profile-title"></h2></div><button id="close-profile" type="button" aria-label="Close videos">×</button></div>
+    <div id="video-choices" aria-label="Choose a profile"></div>
     <div id="player-frame"><iframe id="player" title="Country video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
   </section>
   <script src="./main.min.js"></script>
@@ -135,7 +134,6 @@
   function showCountry(entry,fly=false,index=0) {
     restoreMarker();
     currentCountry=entry; document.getElementById('profile-title').textContent=entry.country;
-    document.getElementById('profile-avatar').src='./avatars/'+entry.videos[index].avatar+'.svg';
     document.getElementById('profile-flag').src='./flags/'+flagCodes[entry.country]+'.svg';
     currentMarker=[...document.querySelectorAll('.country-marker')].find(marker=>marker.dataset.country===entry.country && Number(marker.dataset.videoIndex)===index) || null;
     if(currentMarker) {
@@ -144,7 +142,7 @@
       image.style.visibility='hidden';
     }
     choices.replaceChildren();
-    if(entry.videos.length>1) entry.videos.forEach((video,i)=>{
+    entry.videos.forEach((video,i)=>{
       const button=document.createElement('button'); button.className='video-choice'; button.type='button';
       button.setAttribute('aria-label',entry.country+' story '+(i+1)+' of '+entry.videos.length);
       const image=document.createElement('img'); image.src='./avatars/'+video.avatar+'.svg'; image.alt='';
