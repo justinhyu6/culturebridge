@@ -10,44 +10,35 @@
 h2 {margin:0 0 5px;font-size:18px} .intro {margin:0 0 14px;color:#526b64;font-size:13px}
 .search {width:100%;padding:10px 12px;margin-bottom:12px;border:1px solid #d8e1de;border-radius:8px;font:inherit;color:inherit}
 details {border-top:1px solid #e1e9e5} summary {padding:12px 3px;font-weight:650;cursor:pointer;list-style:none} summary::-webkit-details-marker {display:none} summary::before {content:'›';display:inline-block;margin-right:10px;color:#286b8f;transition:transform .15s} details[open]>summary::before {transform:rotate(90deg)}
-.country {margin-left:18px} .country summary {font-weight:550} .flag {width:23px;height:17px;object-fit:cover;vertical-align:-3px;margin-right:8px;border-radius:2px}
-.people {display:flex;flex-wrap:wrap;gap:8px;padding:0 0 12px 20px} .person {display:flex;align-items:center;gap:8px;padding:6px 10px 6px 6px;border:1px solid #e4ebe7;border-radius:9px;background:#f5f8f6;color:#17324d;font:600 13px Geist,system-ui,sans-serif;cursor:pointer}
-.person:hover,.person:focus-visible {background:#e9f1ed;outline:2px solid #9db9ad;outline-offset:1px} .person img {width:36px;height:36px;border:2px solid white;border-radius:50%;background:#e8d5b7}
-.player-wrap {width:100%;padding:0 0 14px 20px} .player-wrap[hidden] {display:none} .player-wrap p {margin:0 0 8px;color:#526b64;font-size:12px} .player-frame {position:relative;width:100%;overflow:hidden;border-radius:8px;background:#17324d} .player-frame iframe {position:absolute;left:0;top:0;border:0;transform-origin:top left;background:#17324d} .empty {color:#526b64;font-size:13px}
+.country {display:flex;align-items:center;gap:9px;width:calc(100% - 18px);margin-left:18px;padding:11px 10px;border:0;border-top:1px solid #e1e9e5;background:transparent;color:#17324d;text-align:left;cursor:pointer;font:550 14px Geist,system-ui,sans-serif}
+.country:hover,.country:focus-visible {background:#eef4f0;outline:2px solid #9db9ad;outline-offset:-2px;border-radius:6px}
+.flag {width:23px;height:17px;object-fit:cover;border-radius:2px}.count {margin-left:auto;color:#71867e;font-size:12px;font-weight:400}.empty {color:#526b64;font-size:13px}
 </style>
 </head>
-<body><main class="browser"><h2>Browse by region</h2><p class="intro">Explore profiles from around the world.</p><input class="search" id="search" type="search" placeholder="Search regions or countries" aria-label="Search regions or countries"><div id="results"></div></main>
+<body><main class="browser"><h2>Browse by region</h2><p class="intro">Choose a country to explore its videos on the globe.</p><input class="search" id="search" type="search" placeholder="Search regions or countries" aria-label="Search regions or countries"><div id="results"></div></main>
 <script>
 const regions={Algeria:'Africa',Nigeria:'Africa',China:'Asia',Indonesia:'Asia',Japan:'Asia','North Korea':'Asia',Philippines:'Asia',Singapore:'Asia','South Korea':'Asia',Thailand:'Asia',Australia:'Australia & Oceania',Denmark:'Europe','United Kingdom':'Europe',Germany:'Europe',Poland:'Europe',Russia:'Europe',Serbia:'Europe',Sweden:'Europe',Netherlands:'Europe',Mexico:'North America'};
 const flags={Algeria:'dz',Nigeria:'ng',China:'cn',Indonesia:'id',Japan:'jp','North Korea':'kp',Philippines:'ph',Singapore:'sg','South Korea':'kr',Thailand:'th',Australia:'au',Denmark:'dk','United Kingdom':'gb',Germany:'de',Poland:'pl',Russia:'ru',Serbia:'rs',Sweden:'se',Netherlands:'nl',Mexico:'mx'};
-const results=document.getElementById('results'),search=document.getElementById('search'); let entries=[], playerObserver=null;
-function openStory(entry,index,people) {
-  const video=entry.videos[index];
-  if(playerObserver){playerObserver.disconnect();playerObserver=null;}
-  document.querySelectorAll('.player-wrap').forEach(element=>element.remove());
-  const wrap=document.createElement('div');wrap.className='player-wrap';
-  const note=document.createElement('p');note.textContent=entry.country+' · Profile '+(index+1);
-  const player=document.createElement('iframe');player.title=entry.country+' profile video';player.src='https://drive.google.com/file/d/'+encodeURIComponent(video.id)+'/preview';player.allow='autoplay; fullscreen; picture-in-picture';player.allowFullscreen=true;
-  const ratio=video.width/video.height, frame=document.createElement('div');frame.className='player-frame';frame.style.aspectRatio=video.width+' / '+video.height;frame.style.maxWidth=Math.min(500,280*ratio)+'px';frame.append(player);
-  wrap.append(note,frame);people.after(wrap);
-  const resize=()=>{const width=frame.clientWidth;if(!width)return;const layout=Math.max(320,width);player.style.width=layout+'px';player.style.height=(layout/ratio)+'px';player.style.transform='scale('+(width/layout)+')';};
-  playerObserver=new ResizeObserver(resize);playerObserver.observe(frame);resize();
-  if(window.parent!==window){for(let i=0;i<window.parent.frames.length;i++){try{window.parent.frames[i].postMessage({type:'culturebridge:open',country:entry.country,index:index},location.origin);}catch(_){}}}
+const results=document.getElementById('results'),search=document.getElementById('search'); let entries=[];
+function openCountry(entry) {
+  if(window.parent===window)return;
+  for(let i=0;i<window.parent.frames.length;i++){
+    try{window.parent.frames[i].postMessage({type:'culturebridge:open',country:entry.country,index:0},location.origin);}catch(_){}
+  }
+  window.parent.postMessage({type:'culturebridge:country-selected'},'*');
 }
 function render() {
-  if(playerObserver){playerObserver.disconnect();playerObserver=null;}
   const q=search.value.trim().toLowerCase();results.replaceChildren();const grouped=new Map();
   for(const entry of entries){const region=regions[entry.country];if(!region || (q&&!region.toLowerCase().includes(q)&&!entry.country.toLowerCase().includes(q)))continue;if(!grouped.has(region))grouped.set(region,[]);grouped.get(region).push(entry)}
   for(const [region,countries] of [...grouped].sort((a,b)=>a[0].localeCompare(b[0]))) {
     const regionBox=document.createElement('details');regionBox.open=!!q;const heading=document.createElement('summary');heading.textContent=region;regionBox.append(heading);
     for(const entry of countries.sort((a,b)=>a.country.localeCompare(b.country))){
-      const country=document.createElement('details');country.className='country';country.open=!!q;const title=document.createElement('summary');
-      const flag=document.createElement('img');flag.className='flag';flag.alt='';flag.src='./flags/'+flags[entry.country]+'.svg';title.append(flag,document.createTextNode(entry.country));country.append(title);
-      const people=document.createElement('div');people.className='people';entry.videos.forEach((video,index)=>{
-        const button=document.createElement('button');button.type='button';button.className='person';button.setAttribute('aria-label','Open '+entry.country+' profile '+(index+1));
-        const image=document.createElement('img');image.src='./avatars/'+video.avatar+'.svg';image.alt='';const label=document.createElement('span');label.textContent='Profile '+(index+1);button.append(image,label);
-        button.addEventListener('click',()=>openStory(entry,index,people));people.append(button);
-      });country.append(people);regionBox.append(country);
+      const button=document.createElement('button');button.type='button';button.className='country';
+      button.setAttribute('aria-label','Show '+entry.country+' on the globe');
+      const flag=document.createElement('img');flag.className='flag';flag.alt='';flag.src='./flags/'+flags[entry.country]+'.svg';
+      const name=document.createElement('span');name.textContent=entry.country;
+      const count=document.createElement('span');count.className='count';count.textContent=entry.videos.length+' '+(entry.videos.length===1?'video':'videos');
+      button.append(flag,name,count);button.addEventListener('click',()=>openCountry(entry));regionBox.append(button);
     }results.append(regionBox);
   }
   if(!grouped.size){const empty=document.createElement('p');empty.className='empty';empty.textContent='No matching countries found.';results.append(empty)}
