@@ -81,7 +81,7 @@
   globe.globe.globeImageUrl(canvas.toDataURL());
   const profile=document.getElementById('profile'), player=document.getElementById('player'), playerFrame=document.getElementById('player-frame');
   const choices=document.getElementById('video-choices');
-  const flagCodes={Algeria:'dz',Nigeria:'ng',China:'cn',Indonesia:'id',Japan:'jp','North Korea':'kp',Philippines:'ph',Singapore:'sg','South Korea':'kr',Thailand:'th',Australia:'au',Denmark:'dk','United Kingdom':'gb',Germany:'de',Poland:'pl',Russia:'ru',Serbia:'rs',Sweden:'se',Netherlands:'nl',Mexico:'mx'};
+  const flagCodes={Algeria:'dz',Nigeria:'ng',China:'cn',Indonesia:'id',Japan:'jp','North Korea':'kp',Philippines:'ph',Singapore:'sg','South Korea':'kr',Thailand:'th',Taiwan:'tw',Australia:'au',Denmark:'dk','United Kingdom':'gb',Germany:'de',Poland:'pl',Russia:'ru',Serbia:'rs',Sweden:'se',Netherlands:'nl',Slovakia:'sk',Mexico:'mx',Canada:'ca',Argentina:'ar'};
   let currentCountry=null, currentMarker=null, currentVideo=null;
   function restoreMarker() {
     if (!currentMarker) return;
@@ -143,7 +143,7 @@
     entry.videos.forEach((video,i)=>{
       const button=document.createElement('button'); button.className='video-choice'; button.type='button';
       button.setAttribute('aria-label',entry.country+' story '+(i+1)+' of '+entry.videos.length);
-      const image=document.createElement('img'); image.src='./avatars/'+video.avatar+'.svg'; image.alt='';
+      const image=document.createElement('img'); image.src='./avatars/'+video.avatar+'.svg?v=20261103-avatars2'; image.alt='';
       button.append(image); button.addEventListener('click',()=>showCountry(entry,false,i)); choices.append(button);
     });
     selectVideo(entry,index); profile.hidden=false; positionProfile();
@@ -161,7 +161,7 @@
     });
     positionProfile();
   }
-  fetch('./videos.json').then(response=>{ if(!response.ok)throw new Error('Could not load the video list'); return response.json(); }).then(entries=>{
+  fetch('./videos.json?v=20261103-avatars2', {cache:'no-store'}).then(response=>{ if(!response.ok)throw new Error('Could not load the video list'); return response.json(); }).then(entries=>{
     entries.sort((a,b)=>a.country.localeCompare(b.country));
     window.addEventListener('message',event=>{
       if(event.origin!==location.origin || !event.data || event.data.type!=='culturebridge:open') return;
@@ -174,7 +174,7 @@
       const marker=document.createElement('button'); marker.type='button'; marker.className='country-marker';
       marker.dataset.lat=entry.lat; marker.dataset.lng=entry.lng; marker.dataset.country=entry.country; marker.dataset.videoIndex=entry.videoIndex; marker.setAttribute('aria-label',entry.country+(entry.markerCount>1?' story '+(entry.videoIndex+1)+' of '+entry.videos.length:' stories'));
       if(entry.markerCount>1) marker.style.translate=((entry.videoIndex-(entry.markerCount-1)/2)*42)+'px 0';
-      const avatar=document.createElement('img'); avatar.src='./avatars/'+entry.videos[entry.videoIndex].avatar+'.svg'; avatar.alt='';
+      const avatar=document.createElement('img'); avatar.src='./avatars/'+entry.videos[entry.videoIndex].avatar+'.svg?v=20261103-avatars2'; avatar.alt='';
       const label=document.createElement('span'); label.textContent=entry.videoIndex===Math.floor((entry.markerCount-1)/2)?entry.country:'\u00a0'; marker.append(avatar,label);
       marker.addEventListener('click',event=>{event.stopPropagation();showCountry(entry,false,entry.videoIndex);}); return marker;
     });

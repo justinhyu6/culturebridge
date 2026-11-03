@@ -9,7 +9,7 @@ cd C:\Users\email\OneDrive\Documents\learningbridge\culturebridge-pages
 python -m http.server 8000 --bind 127.0.0.1
 ```
 
-Open http://127.0.0.1:8000/ and press Ctrl+C in the terminal to stop. Refresh after changes.
+Open http://127.0.0.1:8000/local-preview.html for a local preview of the WordPress page, or http://127.0.0.1:8000/ for just the globe. Refresh after changes; press Ctrl+C in the terminal to stop the server. The preview loads the globe and country browser locally. Videos still load from Google Drive and need internet access. WordPress theme styling and links may differ from the live website.
 
 Commit and push changes to `main` to publish through GitHub Pages at https://justinhyu6.github.io/culturebridge/.
 

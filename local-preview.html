@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Culture Bridge — local preview</title>
+</head>
+<body>
+<style>
+body{margin:0;font-family:Arial,system-ui,sans-serif}
+.cb-page{--cb-navy: #17324d;--cb-blue: #286b8f;--cb-gold: #c79a3b;--cb-cream: #faf8f3;--cb-light: #f3f6f7;--cb-text: #405463;--cb-white: #ffffff;font-family:inherit;color:var(--cb-text);background:#fff;overflow:hidden}
+.cb-container{width:min(1180px,92%);margin:0 auto}
+.cb-hero{padding:90px 0;background:var(--cb-cream)}
+.cb-hero-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:55px;align-items:center}
+.cb-eyebrow{color:var(--cb-gold);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:18px}
+.cb-hero h1{color:var(--cb-navy);font-size:clamp(40px,5vw,64px);line-height:1.07;margin:0 0 25px;font-weight:800}
+.cb-hero h1 span{color:var(--cb-blue)}
+.cb-hero p{font-size:18px;line-height:1.75;margin:0 0 30px}
+.cb-buttons{display:flex;gap:14px;flex-wrap:wrap}
+.cb-btn{display:inline-block;padding:14px 23px;border-radius:7px;text-decoration:none!important;font-weight:700;transition:.25s ease}
+.cb-btn-primary{background:var(--cb-navy);color:#fff!important}
+.cb-btn-outline{border:1px solid var(--cb-navy);color:var(--cb-navy)!important;background:#fff}
+.cb-btn:hover{transform:translateY(-2px)}
+.cb-hero-art{min-height:560px;border-radius:24px;background:#e7ecec;overflow:hidden}
+.cb-hero-art iframe{display:block;width:100%;height:560px;border:0}
+.cb-question{padding:95px 0;text-align:center}
+.cb-label{color:var(--cb-gold);text-transform:uppercase;letter-spacing:2px;font-size:12px;font-weight:700;margin-bottom:14px}
+.cb-question h2,.cb-section-title{color:var(--cb-navy);font-size:clamp(31px,4vw,46px);line-height:1.15;margin:0 0 35px;font-weight:800}
+.cb-themes{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;max-width:900px;margin:auto}
+.cb-theme{padding:11px 20px;border:1px solid #d7dfe2;border-radius:50px;color:var(--cb-navy);background:#fff;font-weight:600}
+.cb-collections{padding:90px 0;background:var(--cb-light)}
+.cb-heading{text-align:center;max-width:700px;margin:0 auto 45px}
+.cb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.cb-card{background:#fff;padding:32px;border-radius:12px;border:1px solid #e0e7e9;transition:.25s ease}
+.cb-card:hover{transform:translateY(-5px);box-shadow:0 12px 30px #17324d14}
+.cb-icon{font-size:28px;margin-bottom:20px}
+.cb-card h3{color:var(--cb-navy);margin:0 0 12px;font-size:20px}
+.cb-card p{margin:0;line-height:1.7}
+.cb-explore{padding:90px 0}
+.cb-explore-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
+.cb-explore-card{padding:42px 30px;border-radius:14px;background:var(--cb-cream);text-align:center;border-bottom:4px solid var(--cb-gold)}
+.cb-explore-card h3{color:var(--cb-navy);font-size:23px;margin:0 0 14px}
+.cb-explore-card p{line-height:1.65;margin:0 0 20px}
+.cb-link{color:var(--cb-blue);font-weight:700;text-decoration:none!important}
+.cb-context{padding:90px 0;background:var(--cb-navy);color:#fff}
+.cb-context-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px}
+.cb-context h2{color:#fff;font-size:32px;margin:0 0 20px}
+.cb-context p{line-height:1.8}
+.cb-context-list{margin:25px 0 0;padding:0;list-style:none}
+.cb-context-list li{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.cb-context-list li:before{content:"\2713";color:var(--cb-gold);margin-right:10px}
+.cb-programs{padding:90px 0}
+.cb-program-card{padding:30px;border-left:4px solid var(--cb-gold);background:var(--cb-cream)}
+.cb-program-card h3{color:var(--cb-navy);margin:0 0 10px}
+.cb-program-card p{margin:0;line-height:1.65}
+.cb-participate{padding:90px 0;background:var(--cb-light)}
+.cb-founding{padding:75px 20px;background:var(--cb-cream);text-align:center}
+.cb-founding-inner{max-width:800px;margin:auto}
+.cb-founding h2{color:var(--cb-navy);font-size:38px;margin:0 0 18px}
+.cb-founding p{font-size:18px;line-height:1.75}
+.cb-cta{padding:90px 0;text-align:center}
+.cb-cta h2{color:var(--cb-navy);font-size:clamp(32px,4vw,48px);margin:0 0 15px}
+.cb-cta p{max-width:700px;margin:0 auto 28px;font-size:18px;line-height:1.7}
+@media (max-width: 900px){.cb-hero-grid,.cb-context-grid{grid-template-columns:1fr}
+.cb-grid,.cb-explore-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width: 600px){.cb-hero{padding:60px 0}
+.cb-hero-art{min-height:300px}
+.cb-hero-art iframe{height:300px}
+.cb-grid,.cb-explore-grid{grid-template-columns:1fr}
+.cb-question,.cb-collections,.cb-explore,.cb-context,.cb-programs,.cb-participate{padding:65px 0}
+.cb-buttons{flex-direction:column}
+.cb-btn{text-align:center;width:100%}
+}
+.cb-globe-column{min-width:0;margin-top:60px}
+.cb-browse{width:100%;margin-bottom:18px;position:relative;height:48px;z-index:5}
+.cb-browse-label{display:block;margin-bottom:8px;color:var(--cb-navy);font-weight:700;font-size:14px}
+.cb-browse iframe{position:absolute;top:0;left:0;display:block;width:100%;height:48px;border:0}
+
+
+</style>
+
+
+<div class="cb-page">
+
+    <!-- HERO -->
+    <section class="cb-hero">
+        <div class="cb-container cb-hero-grid">
+
+            <div class="cb-intro">
+                <div class="cb-eyebrow">Culture Bridge</div>
+
+                <h1>
+                    Every culture inherits stories.
+                    <span>Every generation</span>
+                    decides whether to listen.
+                </h1>
+
+                <p>
+                    Culture Bridge is a student-led digital archive preserving
+                    folktales, legends, oral histories, murals, street art,
+                    family memory, and community expression in context.
+                </p>
+
+                <div class="cb-buttons">
+
+                    <a href="archive" class="cb-btn cb-btn-primary">
+                        Explore the Archive
+                    </a>
+
+                    <a href="contribute" class="cb-btn cb-btn-outline">
+                        Contribute an Item
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="cb-globe-column">
+            <span class="cb-browse-label" id="cb-search-label">Explore by country</span>
+            <div class="cb-browse">
+                <iframe id="cb-country-browser" src="./countries-dropdown.html?search=1&v=20261103-avatars2" title="Explore by country" aria-labelledby="cb-search-label" loading="lazy"></iframe>
+            </div>
+            <div class="cb-hero-art">
+                <iframe id="cb-globe-frame" src="./index.html?player-min-height=1&v=20261103-avatars2" title="Interactive Culture Bridge globe" loading="lazy" allowfullscreen=""></iframe>
+            </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- QUESTION -->
+    <section class="cb-question">
+        <div class="cb-container">
+
+            <div class="cb-label">The Big Question</div>
+
+            <h2>
+                How have different cultures responded
+                to the same human challenges?
+            </h2>
+
+            <div class="cb-themes">
+
+                <div class="cb-theme">Nature</div>
+                <div class="cb-theme">Identity</div>
+                <div class="cb-theme">Family</div>
+                <div class="cb-theme">Society</div>
+                <div class="cb-theme">Migration</div>
+                <div class="cb-theme">Conflict</div>
+                <div class="cb-theme">Justice</div>
+                <div class="cb-theme">Responsibility</div>
+                <div class="cb-theme">Belonging</div>
+                <div class="cb-theme">The Unknown</div>
+
+            </div>
+        </div>
+    </section>
+
+
+</div>
+<script>
+// Reload local iframe documents on each preview refresh after source edits.
+document.querySelectorAll('#cb-country-browser, #cb-globe-frame').forEach(function (frame) {
+    var url = new URL(frame.src);
+    url.searchParams.set('preview', Date.now());
+    frame.src = url.href;
+});
+document.addEventListener('pointerdown', function () {
+    var browser = document.getElementById('cb-country-browser');
+    if (browser) browser.contentWindow.postMessage({ type: 'culturebridge:close-dropdown' }, window.location.origin);
+});
+window.addEventListener('message', function (event) {
+    var browser = document.getElementById('cb-country-browser');
+    var globe = document.getElementById('cb-globe-frame');
+    if (event.origin === window.location.origin && browser && event.source === browser.contentWindow && event.data && event.data.type === 'culturebridge:dropdown-size') {
+        browser.style.height = event.data.open ? '470px' : '48px';
+    }
+    if (event.origin === window.location.origin && browser && globe &&
+        event.source === browser.contentWindow && event.data &&
+        event.data.type === 'culturebridge:country-selected') {
+                globe.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+});
+</script>
+
+</body>
+</html>

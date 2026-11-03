@@ -114,6 +114,12 @@
         "width": 1280,
         "height": 720,
         "avatar": "empty"
+      },
+      {
+        "id": "1IyLM7IxZLd46CVioeRljZQc07_vmU1G0",
+        "width": 9,
+        "height": 16,
+        "avatar": "empty"
       }
     ]
   },
@@ -162,12 +168,6 @@
         "width": 960,
         "height": 544,
         "avatar": "australia-2"
-      },
-      {
-        "id": "1bYH2Occ7yQku6A3SETYStXpwQ9lwCO8O",
-        "width": 960,
-        "height": 544,
-        "avatar": "australia-3"
       }
     ]
   },
@@ -228,6 +228,12 @@
         "width": 544,
         "height": 960,
         "avatar": "empty"
+      },
+      {
+        "id": "1U7KuvUMZM8OxRxh3f0-eaevNXqRVfwEv",
+        "width": 3,
+        "height": 4,
+        "avatar": "germany-4"
       }
     ]
   },
@@ -238,7 +244,7 @@
     "avatar": "paris",
     "videos": [
       {
-        "id": "1vgpSj78PhaTwHTlAVPxd1RMTEbm3rABX",
+        "id": "1jJvFIf-4X5XBdwZIlKnxOS6Ex34zecRx",
         "width": 544,
         "height": 960,
         "avatar": "poland-1"
@@ -317,6 +323,62 @@
         "id": "1gNNfdwsPvJNaprxgS0-yS-3nAkQIHjDB",
         "width": 1080,
         "height": 1920,
+        "avatar": "empty"
+      }
+    ]
+  },
+  {
+    "country": "Taiwan",
+    "lat": 23.7,
+    "lng": 121,
+    "avatar": "taiwan-1",
+    "videos": [
+      {
+        "id": "1XcZV-YXvq9Xs5oM-AxZeozn5DSB2C1QJ",
+        "width": 9,
+        "height": 16,
+        "avatar": "taiwan-1"
+      }
+    ]
+  },
+  {
+    "country": "Slovakia",
+    "lat": 48.7,
+    "lng": 19.7,
+    "avatar": "empty",
+    "videos": [
+      {
+        "id": "1_didsD-gF8Di26y4xpcqZ8MEiBv_dLBF",
+        "width": 9,
+        "height": 16,
+        "avatar": "empty"
+      }
+    ]
+  },
+  {
+    "country": "Canada",
+    "lat": 56,
+    "lng": -106,
+    "avatar": "empty",
+    "videos": [
+      {
+        "id": "1CKQNb9dL97zESWe6yizYjyG76aziAiaL",
+        "width": 16,
+        "height": 9,
+        "avatar": "empty"
+      }
+    ]
+  },
+  {
+    "country": "Argentina",
+    "lat": -38,
+    "lng": -64,
+    "avatar": "empty",
+    "videos": [
+      {
+        "id": "178AsTug7nK_LlWDu3xVsVLkSE_7N36-W",
+        "width": 7,
+        "height": 10,
         "avatar": "empty"
       }
     ]

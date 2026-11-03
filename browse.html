@@ -16,8 +16,8 @@ details {border-top:1px solid #e1e9e5} summary {padding:12px 3px;font-weight:650
 </head>
 <body><main class="browser"><input class="search" id="search" type="search" placeholder="Search regions or countries" aria-label="Search regions or countries"><div id="results"></div></main>
 <script>
-const regions={Algeria:'Africa',Nigeria:'Africa',China:'Asia',Indonesia:'Asia',Japan:'Asia','North Korea':'Asia',Philippines:'Asia',Singapore:'Asia','South Korea':'Asia',Thailand:'Asia',Australia:'Australia & Oceania',Denmark:'Europe','United Kingdom':'Europe',Germany:'Europe',Poland:'Europe',Russia:'Europe',Serbia:'Europe',Sweden:'Europe',Netherlands:'Europe',Mexico:'North America'};
-const flags={Algeria:'dz',Nigeria:'ng',China:'cn',Indonesia:'id',Japan:'jp','North Korea':'kp',Philippines:'ph',Singapore:'sg','South Korea':'kr',Thailand:'th',Australia:'au',Denmark:'dk','United Kingdom':'gb',Germany:'de',Poland:'pl',Russia:'ru',Serbia:'rs',Sweden:'se',Netherlands:'nl',Mexico:'mx'};
+const regions={Algeria:'Africa',Nigeria:'Africa',China:'Asia',Indonesia:'Asia',Japan:'Asia','North Korea':'Asia',Philippines:'Asia',Singapore:'Asia','South Korea':'Asia',Thailand:'Asia',Taiwan:'Asia',Australia:'Australia & Oceania',Denmark:'Europe','United Kingdom':'Europe',Germany:'Europe',Poland:'Europe',Russia:'Europe',Serbia:'Europe',Sweden:'Europe',Netherlands:'Europe',Slovakia:'Europe',Mexico:'North America',Canada:'North America',Argentina:'South America'};
+const flags={Algeria:'dz',Nigeria:'ng',China:'cn',Indonesia:'id',Japan:'jp','North Korea':'kp',Philippines:'ph',Singapore:'sg','South Korea':'kr',Thailand:'th',Taiwan:'tw',Australia:'au',Denmark:'dk','United Kingdom':'gb',Germany:'de',Poland:'pl',Russia:'ru',Serbia:'rs',Sweden:'se',Netherlands:'nl',Slovakia:'sk',Mexico:'mx',Canada:'ca',Argentina:'ar'};
 const results=document.getElementById('results'),search=document.getElementById('search'); let entries=[];
 function openCountry(entry) {
   if(window.parent===window)return;
@@ -42,7 +42,7 @@ function render() {
   if(!grouped.size){const empty=document.createElement('p');empty.className='empty';empty.textContent='No matching countries found.';results.append(empty)}
 }
 search.addEventListener('input',render);
-fetch('./videos.json').then(response=>{if(!response.ok)throw new Error('Could not load profiles');return response.json()}).then(data=>{entries=data;render()}).catch(()=>{results.textContent='Profiles could not be loaded.'});
+fetch('./videos.json?v=20261103-avatars2', {cache:'no-store'}).then(response=>{if(!response.ok)throw new Error('Could not load profiles');return response.json()}).then(data=>{entries=data;render()}).catch(()=>{results.textContent='Profiles could not be loaded.'});
 </script>
 </body>
 </html>
